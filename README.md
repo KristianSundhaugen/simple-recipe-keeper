@@ -1,1 +1,1 @@
-# simpler-recipe-keeper
+# simple-recipe-keeper
