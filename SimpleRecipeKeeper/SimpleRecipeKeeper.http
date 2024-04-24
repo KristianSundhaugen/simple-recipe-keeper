@@ -1,0 +1,6 @@
+@SimpleRecipeKeeper_HostAddress = http://localhost:5288
+
+GET {{SimpleRecipeKeeper_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

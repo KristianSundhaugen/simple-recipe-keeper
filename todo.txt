@@ -1,0 +1,4 @@
+* Be able to get all documents from elastic
+* Be able to create a new document
+* Create frontend I can use to search
+* Create frontend I can use to create new recipes
