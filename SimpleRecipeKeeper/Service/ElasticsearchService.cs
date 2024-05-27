@@ -1,5 +1,4 @@
 using Nest;
-using Microsoft.Extensions.Configuration;
 
 public class ElasticsearchService
 {
