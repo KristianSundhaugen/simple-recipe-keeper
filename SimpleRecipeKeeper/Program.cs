@@ -7,7 +7,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers(); // Add controllers service
 
-// Add your custom services here
+// Configure Elasticsearch settings
+builder.Services.Configure<ElasticsearchService>(builder.Configuration.GetSection("ElasticsearchService"));
+
+// Add Elasticsearch service
 builder.Services.AddSingleton<ElasticsearchService>();
 
 var app = builder.Build();
