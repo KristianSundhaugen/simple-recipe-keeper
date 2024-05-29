@@ -16,9 +16,9 @@ public class ElasticsearchServiceTests
     [SetUp]
     public void Setup()
     {
-        _mockElasticClient = new Mock<IElasticClient>();
-        _mockElasticClient.Setup(x => x.ConnectionSettings).Returns(new ConnectionSettings(new Uri("http://localhost:9200")));
-        _elasticsearchService = new ElasticsearchService(_mockElasticClient.Object);
+    //     _mockElasticClient = new Mock<IElasticClient>();
+    //     _mockElasticClient.Setup(x => x.ConnectionSettings).Returns(new ConnectionSettings(new Uri("http://localhost:9200")));
+    //     _elasticsearchService = new ElasticsearchService(_mockElasticClient.Object);
     }
 
     [Test]

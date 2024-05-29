@@ -1,4 +1,9 @@
 using Nest;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.Extensions.Logging;
 
 public class ElasticsearchService : IElasticsearchService
 {
@@ -7,46 +12,76 @@ public class ElasticsearchService : IElasticsearchService
     public ElasticsearchService(IConfiguration configuration)
     {
         var url = configuration.GetSection("Elasticsearch:Url").Value;
-        var settings = new ConnectionSettings(new Uri(url)).DefaultIndex("recipe");
+        var user = configuration.GetSection("Elasticsearch:User").Value;
+        var password = configuration.GetSection("Elasticsearch:Password").Value;
+        var caCertificatePath = configuration.GetSection("Elasticsearch:CaCertificatePath").Value;
+
+        var settings = new ConnectionSettings(new Uri(url))
+            .BasicAuthentication(user, password)
+            .ServerCertificateValidationCallback((sender, certificate, chain, sslPolicyErrors) =>
+            {
+                if (sslPolicyErrors == SslPolicyErrors.None)
+                    return true;
+
+                if (sslPolicyErrors == SslPolicyErrors.RemoteCertificateChainErrors && chain != null)
+                {
+                    foreach (var status in chain.ChainStatus)
+                    {
+                        if (status.Status == X509ChainStatusFlags.UntrustedRoot)
+                        {
+                            // If the only error is untrusted root, we will check if it matches our CA cert
+                            X509Certificate2 caCert = new X509Certificate2(caCertificatePath);
+                            if (chain.ChainElements[chain.ChainElements.Count - 1].Certificate.Thumbprint == caCert.Thumbprint)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            })
+            .DefaultIndex("recipe")
+            .DisableDirectStreaming();  // Enable this to capture request and response
+
         _client = new ElasticClient(settings);
-        // Check if the client is not null and connected to Elasticsearch
-        if (_client != null && _client.Ping().IsValid)
+
+        // Check connection
+        try
         {
-            Console.WriteLine("Connection to Elasticsearch 'recipe' index established successfully.");
+            var pingResponse = _client.Ping();
+            if (pingResponse.IsValid)
+            {
+                Console.WriteLine("Connection to Elasticsearch 'recipe' index established successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Failed to establish connection to Elasticsearch 'recipe' index.");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine("Failed to establish connection to Elasticsearch 'recipe' index.");
+            Console.WriteLine("Exception while establishing connection to Elasticsearch 'recipe' index.");
         }
     }
 
-    public ElasticsearchService(IElasticClient client)
+    public Task<Recipe> CreateRecipeAsync(Recipe recipe)
     {
-        _client = client as ElasticClient ?? throw new ArgumentException("Invalid ElasticClient", nameof(client));
+        throw new NotImplementedException();
     }
 
-    public async Task IndexRecipeAsync(Recipe recipe)
+    public Task<bool> DeleteRecipeAsync(string id)
     {
-        var response = await _client.IndexDocumentAsync(recipe);
-        if (!response.IsValid)
-        {
-            // Handle indexing failure
-            throw new Exception("Failed to index recipe.");
-        }
+        throw new NotImplementedException();
     }
 
-    public async Task<Recipe> GetRecipeAsync(string id)
+    public Task<Recipe> GetRecipeAsync(string id)
     {
-        var response = await _client.GetAsync<Recipe>(id);
-        if (response.IsValid)
-        {
-            return response.Source;
-        }
-        else
-        {
-            // Handle retrieval failure
-            throw new Exception("Failed to retrieve recipe.");
-        }
+        throw new NotImplementedException();
+    }
+
+    public Task<Recipe> GetRecipeByIdAsync(string id)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<IEnumerable<Recipe>> GetRecipesAsync()
@@ -58,32 +93,17 @@ public class ElasticsearchService : IElasticsearchService
         }
         else
         {
-            // Handle retrieval failure
             throw new Exception("Failed to retrieve recipes.");
         }
     }
 
-    public async Task<Recipe> GetRecipeByIdAsync(string id)
+    public Task IndexRecipeAsync(Recipe recipe)
     {
-        var recipe = await GetRecipeAsync(id);
-        return recipe;
+        throw new NotImplementedException();
     }
 
-    public async Task<Recipe> CreateRecipeAsync(Recipe recipe)
+    public Task<Recipe> UpdateRecipeAsync(Recipe recipe)
     {
-        await IndexRecipeAsync(recipe);
-        return recipe;
-    }
-
-    public async Task<Recipe> UpdateRecipeAsync(Recipe recipe)
-    {
-        await IndexRecipeAsync(recipe);
-        return recipe;
-    }
-
-    public async Task<bool> DeleteRecipeAsync(string id)
-    {
-        var response = await _client.DeleteAsync<Recipe>(id);
-        return response.IsValid && response.Result == Result.Deleted;
+        throw new NotImplementedException();
     }
 }
