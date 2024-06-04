@@ -1,9 +1,4 @@
 using Nest;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.Extensions.Logging;
 
 public class ElasticsearchService : IElasticsearchService
 {
@@ -14,38 +9,14 @@ public class ElasticsearchService : IElasticsearchService
         var url = configuration.GetSection("Elasticsearch:Url").Value;
         var user = configuration.GetSection("Elasticsearch:User").Value;
         var password = configuration.GetSection("Elasticsearch:Password").Value;
-        var caCertificatePath = configuration.GetSection("Elasticsearch:CaCertificatePath").Value;
 
         var settings = new ConnectionSettings(new Uri(url))
             .BasicAuthentication(user, password)
-            .ServerCertificateValidationCallback((sender, certificate, chain, sslPolicyErrors) =>
-            {
-                if (sslPolicyErrors == SslPolicyErrors.None)
-                    return true;
-
-                if (sslPolicyErrors == SslPolicyErrors.RemoteCertificateChainErrors && chain != null)
-                {
-                    foreach (var status in chain.ChainStatus)
-                    {
-                        if (status.Status == X509ChainStatusFlags.UntrustedRoot)
-                        {
-                            // If the only error is untrusted root, we will check if it matches our CA cert
-                            X509Certificate2 caCert = new X509Certificate2(caCertificatePath);
-                            if (chain.ChainElements[chain.ChainElements.Count - 1].Certificate.Thumbprint == caCert.Thumbprint)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-                return false;
-            })
             .DefaultIndex("recipe")
-            .DisableDirectStreaming();  // Enable this to capture request and response
+            .DisableDirectStreaming();
 
         _client = new ElasticClient(settings);
 
-        // Check connection
         try
         {
             var pingResponse = _client.Ping();
@@ -55,33 +26,13 @@ public class ElasticsearchService : IElasticsearchService
             }
             else
             {
-                Console.WriteLine("Failed to establish connection to Elasticsearch 'recipe' index.");
+                Console.WriteLine($"Failed to establish connection to Elasticsearch 'recipe' index: {pingResponse.OriginalException.Message}");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Exception while establishing connection to Elasticsearch 'recipe' index.");
+            Console.WriteLine($"Exception while establishing connection to Elasticsearch 'recipe' index: {ex.Message}");
         }
-    }
-
-    public Task<Recipe> CreateRecipeAsync(Recipe recipe)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> DeleteRecipeAsync(string id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Recipe> GetRecipeAsync(string id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Recipe> GetRecipeByIdAsync(string id)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<IEnumerable<Recipe>> GetRecipesAsync()
@@ -97,13 +48,92 @@ public class ElasticsearchService : IElasticsearchService
         }
     }
 
-    public Task IndexRecipeAsync(Recipe recipe)
+    public async Task<Recipe> GetRecipeByIdAsync(string id)
     {
-        throw new NotImplementedException();
+        var response = await _client.GetAsync<Recipe>(id);
+        if (response.IsValid)
+        {
+            return response.Source;
+        }
+        else
+        {
+            throw new Exception($"Failed to retrieve recipe with ID: {id}.");
+        }
     }
 
-    public Task<Recipe> UpdateRecipeAsync(Recipe recipe)
+    public async Task<Recipe> CreateRecipeAsync(Recipe recipe)
     {
-        throw new NotImplementedException();
+        var lastDocumentIdResponse = await _client.SearchAsync<Recipe>(s => s
+        .Size(1)
+        .Sort(sort => sort.Descending("_id")) // Sort by descending ID to get the last document
+        .Source(source => source
+            .Includes(i => i.Field(f => f.Id)) // Only include the ID field in the response
+        )
+    );
+
+        int newId;
+        if (lastDocumentIdResponse.IsValid && lastDocumentIdResponse.Documents.Any())
+        {
+            // Increment the last document ID to generate the new ID
+            newId = lastDocumentIdResponse.Documents.First().Id + 1;
+        }
+        else
+        {
+            // If there are no documents in the index, start with ID = 1
+            newId = 1;
+        }
+
+        // Set the new ID for the recipe
+        recipe.Id = newId;
+
+        // Index the recipe with the new ID
+        var response = await _client.IndexDocumentAsync(recipe);
+        if (response.IsValid)
+        {
+            return recipe;
+        }
+        else
+        {
+            throw new Exception($"Failed to create recipe.");
+        }
+
+    }
+
+    public async Task<bool> DeleteRecipeAsync(string id)
+    {
+        var response = await _client.DeleteAsync<Recipe>(id);
+        return response.IsValid;
+    }
+
+    public async Task<Recipe> UpdateRecipeAsync(Recipe recipe)
+    {
+        var response = await _client.UpdateAsync<Recipe>(recipe.Id.ToString(), u => u.Doc(recipe).RetryOnConflict(3));
+        if (response.IsValid)
+        {
+            var updatedResponse = await _client.GetAsync<Recipe>(recipe.Id.ToString());
+            if (updatedResponse.IsValid)
+            {
+                return updatedResponse.Source;
+            }
+            else
+            {
+                throw new Exception($"Failed to retrieve updated recipe with ID: {recipe.Id}.");
+            }
+        }
+        else
+        {
+            throw new Exception($"Failed to update recipe with ID: {recipe.Id}.");
+        }
+    }
+
+
+
+    public async Task IndexRecipeAsync(Recipe recipe)
+    {
+        var response = await _client.IndexDocumentAsync(recipe);
+        if (!response.IsValid)
+        {
+            throw new Exception($"Failed to index recipe.");
+        }
     }
 }
