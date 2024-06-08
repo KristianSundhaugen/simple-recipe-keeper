@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Keeper</title>
+    <link rel="stylesheet" href="/css/createRecipe.css">
+</head>
+<body>
+    <!-- Search Field -->
+    <div>
+        <input type="text" id="searchField" placeholder="Search for recipes...">
+        <button onclick="searchRecipes()">Search</button>
+    </div>
+
+    <!-- Add Recipe Button -->
+    <div>
+        <a href="/create-recipe">
+            <button>Add New Recipe</button>
+        </a>
+    </div>
+
+    <!-- Categories -->
+    <div>
+        <h2>Categories</h2>
+        <div class="category-item">
+            <img src="placeholder-image.jpg" alt="American Cuisine">
+            <p>American</p>
+        </div>
+        <div class="category-item">
+            <img src="placeholder-image.jpg" alt="Mexican Cuisine">
+            <p>Mexican</p>
+        </div>
+        <div class="category-item">
+            <img src="placeholder-image.jpg" alt="Asian Cuisine">
+            <p>Asian</p>
+        </div>
+    </div>
+
+    <!-- Paginated List of Recipes -->
+    <div>
+        <h2>All Recipes</h2>
+        <!-- Recipe List -->
+        <ul id="recipeList">
+            <!-- Recipes will be dynamically loaded here -->
+        </ul>
+        <!-- Pagination Buttons -->
+        <div>
+            <button onclick="previousPage()">Previous</button>
+            <span id="currentPage">Page 1</span>
+            <button onclick="nextPage()">Next</button>
+            <span id="totalPages">Total Pages: 5</span>
+        </div>
+    </div>
+
+    <!-- Add your JavaScript link here -->
+</body>
+</html>
