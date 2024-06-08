@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Recipe</title>
+    <link rel="stylesheet" href="/css/createRecipe.css">
+</head>
+<body>
+    <form id="recipeForm">
+        <h1>Create Recipe</h1>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="pictureUrl">Picture URL:</label>
+        <input type="url" id="pictureUrl" name="pictureUrl">
+
+        <label for="preparationTimeInMinutes">Preparation Time (minutes):</label>
+        <input type="number" id="preparationTimeInMinutes" name="preparationTimeInMinutes">
+
+        <label for="cookTimeInMinutes">Cook Time (minutes):</label>
+        <input type="number" id="cookTimeInMinutes" name="cookTimeInMinutes">
+
+        <label for="totalTimeInMinutes">Total Time (minutes):</label>
+        <input type="number" id="totalTimeInMinutes" name="totalTimeInMinutes">
+
+        <div id="ingredients">
+            <h3>Ingredients</h3>
+            <div class="ingredient">
+                <label for="ingredientName1">Name:</label>
+                <input type="text" id="ingredientName1" name="ingredientName[]" required>
+                <label for="ingredientQuantity1">Quantity:</label>
+                <input type="number" step="any" id="ingredientQuantity1" name="ingredientQuantity[]" required>
+                <label for="ingredientPreparation1">Preparation:</label>
+                <input type="text" id="ingredientPreparation1" name="ingredientPreparation[]">
+            </div>
+        </div>
+        <button type="button" onclick="addIngredient()">Add Ingredient</button>
+
+        <label for="instructions">Instructions:</label>
+        <textarea id="instructions" name="instructions" rows="4" cols="50" required></textarea>
+
+        <input type="submit" value="Create Recipe">
+    </form>
+
+    <script src="/js/createRecipe.js"></script>
+</body>
+</html>
