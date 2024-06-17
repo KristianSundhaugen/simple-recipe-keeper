@@ -1,3 +1,4 @@
+using Elasticsearch.Net;
 using Nest;
 
 public class ElasticsearchService : IElasticsearchService
@@ -13,6 +14,7 @@ public class ElasticsearchService : IElasticsearchService
         var settings = new ConnectionSettings(new Uri(url))
             .BasicAuthentication(user, password)
             .DefaultIndex("recipe")
+            .ServerCertificateValidationCallback(CertificateValidations.AllowAll)
             .DisableDirectStreaming();
 
         _client = new ElasticClient(settings);
@@ -34,6 +36,7 @@ public class ElasticsearchService : IElasticsearchService
             Console.WriteLine($"Exception while establishing connection to Elasticsearch 'recipe' index: {ex.Message}");
         }
     }
+
 
     public async Task<IEnumerable<Recipe>> GetRecipesAsync()
     {
