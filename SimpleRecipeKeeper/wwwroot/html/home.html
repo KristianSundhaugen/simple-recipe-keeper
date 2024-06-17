@@ -1,58 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipe Keeper</title>
-    <link rel="stylesheet" href="/css/createRecipe.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/home.css">
 </head>
+
 <body>
-    <!-- Search Field -->
-    <div>
-        <input type="text" id="searchField" placeholder="Search for recipes...">
-        <button onclick="searchRecipes()">Search</button>
+    <div class="container">
+        <!-- Search Field -->
+        <div class="search-section">
+            <input type="text" id="searchField" placeholder="Search for recipes...">
+            <button onclick="searchRecipes()">Search</button>
+        </div>
+
+        <!-- Add Recipe Button -->
+        <div class="add-recipe-section">
+            <a href="/create-recipe">
+                <button>Add New Recipe</button>
+            </a>
+        </div>
+
+        <!-- Categories Carousel -->
+        <div id="categoriesCarousel" class="carousel slide categories-section" data-ride="carousel">
+            <h2>Categories</h2>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="d-flex">
+                        <div class="category-item">
+                            <img src="../img/burger.jpg" class="d-block w-100" alt="Burger">
+                            <p>Burger</p>
+                        </div>
+                        <div class="category-item">
+                            <img src="../img/mexican.jpg" class="d-block w-100" alt="Mexican Cuisine">
+                            <p>Mexican</p>
+                        </div>
+                        <div class="category-item">
+                            <img src="../img/asian.jpg" class="d-block w-100" alt="Asian Cuisine">
+                            <p>Asian</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex">
+                        <div class="category-item">
+                            <img src="../img/breakfast.jpg" class="d-block w-100" alt="Breakfast">
+                            <p>Breakfast</p>
+                        </div>
+                        <div class="category-item">
+                            <img src="../img/indian.jpg" class="d-block w-100" alt="Indian Cuisine">
+                            <p>Indian</p>
+                        </div>
+                        <div class="category-item">
+                            <img src="../img/mediterranean.jpg" class="d-block w-100" alt="Mediterranean Cuisine">
+                            <p>Mediterranean</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="d-flex">
+                        <div class="category-item">
+                            <img src="../img/pasta.jpg" class="d-block w-100" alt="Pasta">
+                            <p>Pasta</p>
+                        </div>
+                        <div class="category-item">
+                            <img src="../img/pizza.jpg" class="d-block w-100" alt="Pizza">
+                            <p>Pizza</p>
+                        </div>
+                        <div class="category-item">
+                            <img src="../img/salad.jpg" class="d-block w-100" alt="Salad">
+                            <p>Salad</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#categoriesCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#categoriesCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+        <!-- Paginated List of Recipes -->
+        <div class="recipes-section">
+            <h2>All Recipes</h2>
+            <!-- Recipe List -->
+            <ul id="recipeList">
+                <!-- Recipes will be dynamically loaded here -->
+            </ul>
+            <!-- Pagination Buttons -->
+            <div class="pagination">
+                <button onclick="prevCategory()">Previous</button>
+                <span id="currentCategory">Category 1</span>
+                <button onclick="nextCategory()">Next</button>
+                <span id="totalCategories">Total Categories: 3</span>
+            </div>
+        </div>
     </div>
 
-    <!-- Add Recipe Button -->
-    <div>
-        <a href="/create-recipe">
-            <button>Add New Recipe</button>
-        </a>
-    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#categoriesCarousel').carousel({
+                interval: false // Disable auto sliding
+            });
+        });
 
-    <!-- Categories -->
-    <div>
-        <h2>Categories</h2>
-        <div class="category-item">
-            <img src="placeholder-image.jpg" alt="American Cuisine">
-            <p>American</p>
-        </div>
-        <div class="category-item">
-            <img src="placeholder-image.jpg" alt="Mexican Cuisine">
-            <p>Mexican</p>
-        </div>
-        <div class="category-item">
-            <img src="placeholder-image.jpg" alt="Asian Cuisine">
-            <p>Asian</p>
-        </div>
-    </div>
+        function nextCategory() {
+            $('#categoriesCarousel').carousel('next');
+        }
 
-    <!-- Paginated List of Recipes -->
-    <div>
-        <h2>All Recipes</h2>
-        <!-- Recipe List -->
-        <ul id="recipeList">
-            <!-- Recipes will be dynamically loaded here -->
-        </ul>
-        <!-- Pagination Buttons -->
-        <div>
-            <button onclick="previousPage()">Previous</button>
-            <span id="currentPage">Page 1</span>
-            <button onclick="nextPage()">Next</button>
-            <span id="totalPages">Total Pages: 5</span>
-        </div>
-    </div>
-
-    <!-- Add your JavaScript link here -->
+        function prevCategory() {
+            $('#categoriesCarousel').carousel('prev');
+        }
+    </script>
 </body>
+
 </html>
