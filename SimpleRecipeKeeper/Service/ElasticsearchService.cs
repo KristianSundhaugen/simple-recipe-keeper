@@ -38,9 +38,30 @@ public class ElasticsearchService : IElasticsearchService
     }
 
 
-    public async Task<IEnumerable<Recipe>> GetRecipesAsync()
+    public async Task<IEnumerable<Recipe>> GetRecipesAsync(int page, int pageSize, string foodCategory = null)
     {
-        var response = await _client.SearchAsync<Recipe>(s => s.MatchAll());
+        var from = (page - 1) * pageSize;
+
+        Func<QueryContainerDescriptor<Recipe>, QueryContainer> query;
+        if (!string.IsNullOrEmpty(foodCategory))
+        {
+            query = q => q
+                .Match(m => m
+                    .Field(f => f.FoodCategory)
+                    .Query(foodCategory)
+                );
+        }
+        else
+        {
+            query = q => q.MatchAll();
+        }
+
+        var response = await _client.SearchAsync<Recipe>(s => s
+            .From(from)
+            .Size(pageSize)
+            .Query(query)
+        );
+
         if (response.IsValid)
         {
             return response.Documents;

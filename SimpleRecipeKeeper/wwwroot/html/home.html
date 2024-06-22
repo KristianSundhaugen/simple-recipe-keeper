@@ -7,6 +7,8 @@
     <title>Recipe Keeper</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="../js/ui/loadAllRecipiesList.js" type="module" defer></script>
 </head>
 
 <body>
@@ -30,15 +32,15 @@
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <div class="d-flex">
-                        <div class="category-item">
+                        <div class="category-item" onclick="filterByCategory('Burger')" data-category="Burger">
                             <img src="../img/burger.jpg" class="d-block w-100" alt="Burger">
                             <p>Burger</p>
                         </div>
-                        <div class="category-item">
+                        <div class="category-item" onclick="filterByCategory('Mexican')" data-category="Mexican">
                             <img src="../img/mexican.jpg" class="d-block w-100" alt="Mexican Cuisine">
                             <p>Mexican</p>
                         </div>
-                        <div class="category-item">
+                        <div class="category-item" onclick="filterByCategory('Asian')" data-category="Asian">
                             <img src="../img/asian.jpg" class="d-block w-100" alt="Asian Cuisine">
                             <p>Asian</p>
                         </div>
@@ -46,15 +48,15 @@
                 </div>
                 <div class="carousel-item">
                     <div class="d-flex">
-                        <div class="category-item">
+                        <div class="category-item" onclick="filterByCategory('Breakfast')" data-category="Breakfast">
                             <img src="../img/breakfast.jpg" class="d-block w-100" alt="Breakfast">
                             <p>Breakfast</p>
                         </div>
-                        <div class="category-item">
+                        <div class="category-item" onclick="filterByCategory('Indian')" data-category="Indian">
                             <img src="../img/indian.jpg" class="d-block w-100" alt="Indian Cuisine">
                             <p>Indian</p>
                         </div>
-                        <div class="category-item">
+                        <div class="category-item" onclick="filterByCategory('Mediterranean')" data-category="Mediterranean">
                             <img src="../img/mediterranean.jpg" class="d-block w-100" alt="Mediterranean Cuisine">
                             <p>Mediterranean</p>
                         </div>
@@ -62,15 +64,15 @@
                 </div>
                 <div class="carousel-item">
                     <div class="d-flex">
-                        <div class="category-item">
+                        <div class="category-item" onclick="filterByCategory('Pasta')" data-category="Pasta">
                             <img src="../img/pasta.jpg" class="d-block w-100" alt="Pasta">
                             <p>Pasta</p>
                         </div>
-                        <div class="category-item">
+                        <div class="category-item" onclick="filterByCategory('Pizza')" data-category="Pizza">
                             <img src="../img/pizza.jpg" class="d-block w-100" alt="Pizza">
                             <p>Pizza</p>
                         </div>
-                        <div class="category-item">
+                        <div class="category-item" onclick="filterByCategory('Salad')" data-category="Salad">
                             <img src="../img/salad.jpg" class="d-block w-100" alt="Salad">
                             <p>Salad</p>
                         </div>
@@ -95,32 +97,17 @@
                 <!-- Recipes will be dynamically loaded here -->
             </ul>
             <!-- Pagination Buttons -->
-            <div class="pagination">
-                <button onclick="prevCategory()">Previous</button>
-                <span id="currentCategory">Category 1</span>
-                <button onclick="nextCategory()">Next</button>
-                <span id="totalCategories">Total Categories: 3</span>
+            <div id="paginationControls" class="pagination-controls">
+                <button onclick="prevPage()">Previous</button>
+                <span>Page ${currentPage}</span>
+                <button onclick="nextPage()">Next</button>
             </div>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#categoriesCarousel').carousel({
-                interval: false // Disable auto sliding
-            });
-        });
-
-        function nextCategory() {
-            $('#categoriesCarousel').carousel('next');
-        }
-
-        function prevCategory() {
-            $('#categoriesCarousel').carousel('prev');
-        }
-    </script>
+    <script src="../js/ui/carousel.js"></script>
 </body>
 
 </html>

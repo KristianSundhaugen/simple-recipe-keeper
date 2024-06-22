@@ -1,5 +1,5 @@
 import { createRecipe } from '../api/recipes.js';
-import { getRecipeData } from '../utils/recipe.js';
+import { getRecipeData } from '../utils/recipes.js';
 
 let ingredientCount = 1;
 

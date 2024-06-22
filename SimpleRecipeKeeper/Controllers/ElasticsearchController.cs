@@ -13,9 +13,9 @@ public class ElasticsearchController : ControllerBase
 
     // Get all recipes
     [HttpGet]
-    public async Task<IActionResult> GetRecipes()
+    public async Task<IActionResult> GetRecipes(int page = 1, int pageSize = 10, string foodCategory = null)
     {
-        var recipes = await _elasticsearchService.GetRecipesAsync();
+        var recipes = await _elasticsearchService.GetRecipesAsync(page, pageSize, foodCategory);
         return Ok(recipes);
     }
 

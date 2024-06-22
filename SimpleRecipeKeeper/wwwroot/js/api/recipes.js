@@ -22,9 +22,14 @@ export async function createRecipe(recipe) {
     }
 }
 
-export async function getAllRecipes() {
+export async function getAllRecipes(page = 1, pageSize = 10, foodCategory = null) {
     try {
-        const response = await fetch('/api/recipes', {
+        if(foodCategory != null){
+            var query = `/api/recipes?page=${page}&pageSize=${pageSize}&foodCategory=${foodCategory}`;
+        } else {
+            var query = `/api/recipes?page=${page}&pageSize=${pageSize}`;
+        }
+        const response = await fetch(query, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

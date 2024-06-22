@@ -15,9 +15,9 @@ public class RecipeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Recipe>>> GetRecipes()
+    public async Task<ActionResult<IEnumerable<Recipe>>> GetRecipes(int page = 1, int pageSize = 10, string foodCategory = null)
     {
-        var recipes = await _elasticsearchService.GetRecipesAsync();
+        var recipes = await _elasticsearchService.GetRecipesAsync(page, pageSize, foodCategory);
         return Ok(recipes);
     }
 
