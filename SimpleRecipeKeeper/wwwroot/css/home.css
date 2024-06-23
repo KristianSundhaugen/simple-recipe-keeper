@@ -1,7 +1,7 @@
 /* home.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #EDF1D6;
     margin: 0;
     padding: 0;
 }
@@ -41,7 +41,7 @@ a button {
 
 button,
 a button {
-    background-color: #007bff;
+    background-color: #40513B;
     color: #ffffff;
     cursor: pointer;
     font-size: 16px;
@@ -51,7 +51,7 @@ a button {
 
 button:hover,
 a button:hover {
-    background-color: #0056b3;
+    background-color: #609966;
 }
 
 .categories-section {
@@ -110,8 +110,8 @@ a button:hover {
 }
 
 .category-item.selected {
-    border-color: blue;
-    border-width: 2px; /* Adjust border width for emphasis */
+    border-color: #609966;
+    border-width: 5px; /* Adjust border width for emphasis */
 }
 
 .category-item img {
@@ -149,12 +149,12 @@ a button:hover {
 .recipe-item {
     height: 90%;
     width: 90%;
-    border: 1px solid #ddd;
+    border: 1px solid #9DC08B;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     padding: 15px;
     margin-bottom: 20px;
-    background-color: #fff;
+    background-color: #9DC08B;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 

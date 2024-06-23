@@ -1,7 +1,7 @@
 /* createRecipe.css */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #EDF1D6;
     margin: 0;
     padding: 0;
     display: flex;
@@ -16,7 +16,7 @@ h1 {
 }
 
 form {
-    background-color: #ffffff;
+    background-color: #9DC08B;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -36,13 +36,13 @@ input[type="text"], input[type="url"], input[type="number"], textarea {
     width: calc(100% - 20px);
     padding: 8px;
     margin-bottom: 15px;
-    border: 1px solid #ced4da;
+    border: 1px solid #fff;
     border-radius: 4px;
     box-sizing: border-box;
 }
 
 input[type="submit"], button {
-    background-color: #007bff;
+    background-color: #40513B;
     color: #ffffff;
     border: none;
     padding: 10px 20px;
@@ -52,7 +52,7 @@ input[type="submit"], button {
 }
 
 input[type="submit"]:hover, button:hover {
-    background-color: #0056b3;
+    background-color: #609966;
 }
 
 .ingredient {
