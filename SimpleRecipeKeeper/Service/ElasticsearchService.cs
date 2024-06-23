@@ -38,7 +38,7 @@ public class ElasticsearchService : IElasticsearchService
     }
 
 
-    public async Task<IEnumerable<Recipe>> GetRecipesAsync(int page, int pageSize, string foodCategory = null)
+    public async Task<RecipeSearchResult> GetRecipesAsync(int page, int pageSize, string foodCategory = null)
     {
         var from = (page - 1) * pageSize;
 
@@ -64,13 +64,18 @@ public class ElasticsearchService : IElasticsearchService
 
         if (response.IsValid)
         {
-            return response.Documents;
+            return new RecipeSearchResult
+            {
+                TotalCount = response.Total,
+                Recipes = response.Documents
+            };
         }
         else
         {
             throw new Exception("Failed to retrieve recipes.");
         }
     }
+
 
     public async Task<Recipe> GetRecipeByIdAsync(string id)
     {
