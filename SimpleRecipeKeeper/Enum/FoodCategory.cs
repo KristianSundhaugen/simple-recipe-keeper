@@ -8,5 +8,6 @@ public enum FoodCategory
     Breakfast,
     Asian,
     Mexican,
-    Burger
+    Burger,
+    Italian
 }
