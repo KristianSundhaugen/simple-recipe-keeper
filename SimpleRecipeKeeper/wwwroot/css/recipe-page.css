@@ -1,0 +1,72 @@
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+.recipe-card {
+    max-width: 600px;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.recipe-image {
+    height: auto;
+    width: 100%;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.card-category,
+.card-time,
+.prep-time,
+.cook-time {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.time-details {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.time-details p {
+    margin-bottom: 5px;
+}
+
+h3 {
+    font-size: 1.5rem;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.list-group-item {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 1.5rem;
+    }
+
+    .card-category,
+    .card-time,
+    .prep-time,
+    .cook-time,
+    .list-group-item {
+        font-size: 1rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+}

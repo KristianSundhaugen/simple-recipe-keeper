@@ -18,5 +18,14 @@ namespace SimpleRecipeKeeper.Controllers
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/html/home.html");
             return PhysicalFile(path, "text/html");
         }
+
+
+        [HttpGet("/recipe/{id}")]
+        public IActionResult ViewRecipe()
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/html/recipe.html");
+            return PhysicalFile(path, "text/html");
+
+        }
     }
 }

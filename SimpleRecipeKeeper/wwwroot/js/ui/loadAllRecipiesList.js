@@ -2,11 +2,15 @@ import { getAllRecipes } from '../api/recipes.js';
 
 let currentPage = 1;
 const pageSize = 9;
-let recipes = []; // Initialize recipes array
+let recipes = [];
+let totalCount = 0;
 
 async function loadRecipes(page = 1, foodCategory = null) {
     try {
-        recipes = await getAllRecipes(page, pageSize, foodCategory); // Assign fetched recipes to the global variable
+        const result = await getAllRecipes(page, pageSize, foodCategory);
+        recipes = result.recipes;
+        const totalCount = result.totalCount;
+
         const recipeList = document.getElementById('recipeList');
         recipeList.innerHTML = '';
 
@@ -36,11 +40,16 @@ async function loadRecipes(page = 1, foodCategory = null) {
         }
 
         recipeList.innerHTML = htmlContent;
+
+        const totalCountElement = document.getElementById('totalCount');
+        totalCountElement.innerText = `${totalCount} recipes found`;
+
         updatePaginationControls();
     } catch (error) {
         console.error('Error loading recipes:', error);
     }
 }
+
 
 function updatePaginationControls() {
     const paginationControls = document.getElementById('paginationControls');
@@ -64,24 +73,27 @@ function nextPage() {
 }
 
 function filterByCategory(category) {
-    const allCategoryItem = document.querySelector('.category-item[data-category="All"]');
     const clickedItem = document.querySelector(`.category-item[data-category="${category}"]`);
 
-    if (clickedItem.classList.contains('selected')) {
-        clickedItem.classList.remove('selected');
+    if (!clickedItem) {
+        console.warn(`Category item for ${category} not found`);
+        return;
+    }
+
+    const isSelected = clickedItem.classList.contains('selected');
+    const categoryItems = document.querySelectorAll('.category-item');
+    categoryItems.forEach(item => {
+        item.classList.remove('selected');
+    });
+
+    if (isSelected) {
         loadRecipes(currentPage);
     } else {
-        const categoryItems = document.querySelectorAll('.category-item');
-        categoryItems.forEach(item => {
-            item.classList.remove('selected');
-        });
-
         clickedItem.classList.add('selected');
         loadRecipes(currentPage, category);
     }
-    
-    allCategoryItem.classList.remove('selected');
 }
+
 
 
 

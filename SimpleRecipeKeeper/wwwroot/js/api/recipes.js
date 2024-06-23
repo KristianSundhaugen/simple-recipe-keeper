@@ -47,3 +47,26 @@ export async function getAllRecipes(page = 1, pageSize = 10, foodCategory = null
         throw error;
     }
 }
+
+export async function getRecipeById(id) {
+    try {
+        const response = await fetch(`/api/recipes/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            throw new Error('Failed to fetch recipe.');
+        }
+    } catch (error) {
+        console.error('Error fetching recipe:', error);
+        throw error;
+    }
+}
+
+
