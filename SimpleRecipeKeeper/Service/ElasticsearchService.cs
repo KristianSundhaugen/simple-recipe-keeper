@@ -165,4 +165,30 @@ public class ElasticsearchService : IElasticsearchService
             throw new Exception($"Failed to index recipe.");
         }
     }
+
+    public async Task<List<Recipe>> SearchRecipesAsync(string searchText)
+    {
+        var response = await _client.SearchAsync<Recipe>(s => s
+            .Query(q => q
+                .MultiMatch(m => m
+                    .Fields(f => f
+                        .Field(ff => ff.Title)
+                        .Field(ff => ff.Ingredients)
+                        .Field(ff => ff.Instructions)
+                    )
+                    .Query(searchText)
+                    .Fuzziness(Fuzziness.Auto)
+                )
+            )
+        );
+
+        if (response.IsValid)
+        {
+            return response.Documents.ToList();
+        }
+        else
+        {
+            throw new Exception("Failed to search recipes.");
+        }
+    }
 }

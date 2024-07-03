@@ -67,4 +67,18 @@ public class RecipeController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpGet("search/{searchText}")]
+    public async Task<ActionResult<RecipeSearchResult>> SearchRecipes([FromRoute] string searchText)
+    {
+        try
+        {
+            var result = await _elasticsearchService.SearchRecipesAsync(searchText);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
 }

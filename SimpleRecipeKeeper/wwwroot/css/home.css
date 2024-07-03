@@ -28,6 +28,58 @@ h1, h2 {
     margin-bottom: 20px;
 }
 
+.search-section {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#searchField {
+    flex: 1; /* Take up remaining space */
+    margin-right: 10px; /* Margin between input field and button */
+}
+
+#searchButton {
+    background-color: #40513B;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    width: 15%;
+}
+
+#searchButton:hover {
+    background-color: #609966;
+}
+
+#searchDropdown {
+    position: absolute;
+    top: calc(100% - 13px);
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    width: calc(100% - 2px);
+}
+
+.dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
 input[type="text"],
 button,
 a button {
@@ -210,6 +262,10 @@ a button:hover {
     .categories-section,
     .recipes-section {
         width: 80%;
+    }
+    #searchDropdown {
+        width: calc(100% - 20px);
+        left: 10px;
     }
 }
 
