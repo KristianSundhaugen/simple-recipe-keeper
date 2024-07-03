@@ -1,72 +1,125 @@
 body {
-    background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
 }
 
-.recipe-card {
-    max-width: 600px;
-    margin: auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: none;
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
 }
 
-.recipe-image {
-    height: auto;
-    width: 100%;
-    object-fit: cover;
-}
-
-.card-body {
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
 }
 
-.card-title {
-    font-size: 2rem;
-    margin-bottom: 10px;
+header {
+    position: relative;
+    text-align: center;
 }
 
-.card-category,
-.card-time,
-.prep-time,
-.cook-time {
-    font-size: 1.1rem;
-    margin-bottom: 10px;
+#back-button {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    color: #6c757d;
+    padding: 0;
+    transition: color 0.3s ease;
 }
 
-.time-details {
+#back-button:hover {
+    color: #5a6268;
+    text-decoration: none;
+}
+
+.category {
+    font-family: 'Merriweather', serif;
+    font-weight: 300;
+    text-transform: uppercase;
+    color: #666;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+hr {
+    border: none;
+    border-top: 2px solid;
+    margin: 10px 0;
+}
+
+main {
+    display: flex;
+    margin-top: 20px;
+}
+
+.left-side {
+    flex: 1;
+    padding-right: 20px;
+    border-right: 2px solid;
+}
+
+.right-side {
+    flex: 2;
+    padding-left: 20px;
+}
+
+.ingredients-list {
+    padding-left: 20px;
+}
+
+.notes {
+    margin-top: 20px;
+    font-style: italic;
+    color: #555;
+}
+
+.time-info {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
-.time-details p {
-    margin-bottom: 5px;
+.time-info strong {
+    font-weight: 700;
 }
 
-h3 {
-    font-size: 1.5rem;
-    margin-top: 20px;
-    margin-bottom: 10px;
+.time-info div {
+    text-align: center;
 }
 
-.list-group-item {
-    font-size: 1.1rem;
+.recipe-image {
+    max-width: 100%;
+    height: auto;
+    margin: 20px 0;
 }
 
-@media (max-width: 768px) {
-    .card-title {
-        font-size: 1.5rem;
-    }
+.directions-list {
+    padding-left: 20px;
+}
 
-    .card-category,
-    .card-time,
-    .prep-time,
-    .cook-time,
-    .list-group-item {
-        font-size: 1rem;
-    }
+.recipe-title {
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+}
 
-    h3 {
-        font-size: 1.25rem;
-    }
+.ingredients-title, .directions-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card {
+    border: none;
+    box-shadow: none;
 }

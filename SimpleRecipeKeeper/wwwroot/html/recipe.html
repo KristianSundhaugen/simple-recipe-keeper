@@ -1,39 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipe</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/recipe-page.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <div class="container my-5">
         <div class="recipe-card card">
-            <img src="https://via.placeholder.com/600x400" alt="Recipe Image" class="card-img-top recipe-image" id="recipe-image">
-            <div class="card-body">
-                <h2 class="card-title" id="recipe-title">Recipe Title</h2>
-                <p class="card-category" id="food-category">Category: <span></span></p>
-                <p class="card-time" id="total-time">Total Time: <span></span></p>
-                <div class="time-details">
-                    <p class="prep-time" id="prep-time">Preparation Time: <span></span></p>
-                    <p class="cook-time" id="cook-time">Cook Time: <span></span></p>
+            <header>
+                <button id="back-button" class="btn btn-link">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                    <span class="sr-only">Back to Home</span>
+                </button>
+                <h2 class="category" id="food-category"><span></span></h2>
+            </header>
+            <hr>
+            <h1 class="recipe-title" id="recipe-title">Recipe Title</h1>
+            <hr>
+            <main>
+                <div class="left-side">
+                    <h3 class="ingredients-title">INGREDIENTS</h3>
+                    <ul class="list-group list-group-flush" id="ingredients-list">
+                        <!-- Ingredients will be dynamically loaded here -->
+                    </ul>
+                    <p class="notes"><strong>Notes:</strong> <span id="recipe-notes"></span></p>
                 </div>
-                <h3>Ingredients</h3>
-                <ul class="list-group list-group-flush" id="ingredients-list">
-                    <!-- Ingredients will be dynamically loaded here -->
-                </ul>
-                <h3>Instructions</h3>
-                <p class="card-text" id="instructions">Step by step instructions go here...</p>
-            </div>
+                
+                <div class="right-side">
+                    <div class="time-info">
+                        <div>
+                            <p><strong>Preparation time:</strong></p>
+                            <p id="prep-time"></p>
+                        </div>
+                        <div>
+                            <p><strong>Cook time:</strong></p>
+                            <p id="cook-time"></p>
+                        </div>
+                        <div>
+                            <p><strong>Total time:</strong></p>
+                            <p id="total-time"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <img src="https://via.placeholder.com/600x400" alt="Recipe Image" class="recipe-image" id="recipe-image">
+                    <h3 class="directions-title">DIRECTIONS:</h3>
+                    <p class="card-text" id="instructions">Step by step instructions go here...</p>
+                </div>
+            </main>
         </div>
     </div>
-
+    <script src="../js/ui/loadRecipeView.js" type="module"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/ui/loadRecipeView.js" type="module"></script>
 </body>
-
 </html>
