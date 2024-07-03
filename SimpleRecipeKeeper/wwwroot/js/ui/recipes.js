@@ -14,7 +14,7 @@ function addIngredient() {
         <input type="number" step="any" id="ingredientQuantity${ingredientCount}" name="ingredientQuantity[]" required>
         <label for="ingredientPreparation${ingredientCount}">Preparation:</label>
         <input type="text" id="ingredientPreparation${ingredientCount}" name="ingredientPreparation[]">
-        <button type="button" onclick="removeIngredient(this)">Remove</button>
+        <button type="button" onclick="removeIngredient(this)" class="remove-btn"><i class="fas fa-trash"></i></button>
     `;
     document.getElementById('ingredients').appendChild(ingredientDiv);
 }
@@ -34,5 +34,13 @@ document.getElementById('recipeForm').addEventListener('submit', async (e) => {
         document.getElementById('recipeForm').reset();
     }
 });
+
+document.getElementById('back-button').addEventListener('click', () => {
+    window.history.back();
+});
+
+// Export functions to global scope
+window.addIngredient = addIngredient;
+window.removeIngredient = removeIngredient;
 
 export { addIngredient, removeIngredient };
