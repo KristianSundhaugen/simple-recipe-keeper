@@ -1,5 +1,4 @@
 import { createRecipe } from '../api/recipes.js';
-import { getRecipeData } from '../utils/recipes.js';
 
 let ingredientCount = 1;
 
@@ -26,9 +25,9 @@ function removeIngredient(button) {
 document.getElementById('recipeForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const recipe = getRecipeData();
+    const formData = new FormData(document.getElementById('recipeForm'));
 
-    const success = await createRecipe(recipe);
+    const success = await createRecipe(formData);
 
     if (success) {
         document.getElementById('recipeForm').reset();
@@ -39,7 +38,6 @@ document.getElementById('back-button').addEventListener('click', () => {
     window.history.back();
 });
 
-// Export functions to global scope
 window.addIngredient = addIngredient;
 window.removeIngredient = removeIngredient;
 

@@ -60,4 +60,16 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = '/home';
         });
     }
+
+    const editButton = document.getElementById('edit-button');
+    if (editButton) {
+        editButton.addEventListener('click', () => {
+            const recipeId = getRecipeId();
+            if (recipeId) {
+                window.location.href = `/create-recipe/2`;
+            } else {
+                console.error('Recipe ID not found');
+            }
+        });
+    }
 });

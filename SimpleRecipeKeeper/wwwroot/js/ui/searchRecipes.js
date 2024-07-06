@@ -46,6 +46,7 @@ function selectRecipe(recipe) {
     const searchField = document.getElementById('searchField');
     searchField.value = recipe.title;
     clearDropdown();
+    window.viewRecipe(recipe.id);
 }
 
 function clearDropdown() {

@@ -26,7 +26,7 @@ async function loadRecipes(page = 1, foodCategory = null) {
                     const recipe = recipes[recipeIndex];
                     htmlContent += `
                         <div class="col-4">
-                            <div class="recipe-item">
+                            <div class="recipe-item" onclick="viewRecipe(${recipe.id})">
                                 <img src="${recipe.pictureUrl || '/placeholder.jpg'}" alt="${recipe.title}" class="img-fluid">
                                 <h5>${recipe.title}</h5>
                                 <p><i class="fas fa-clock"></i> ${recipe.totalTimeInMinutes} mins</p>
@@ -94,11 +94,13 @@ function filterByCategory(category) {
     }
 }
 
-
-
+function viewRecipe(id) {
+    window.location.href = `http://localhost:5288/recipe/${id}`;
+}
 
 document.addEventListener('DOMContentLoaded', () => loadRecipes(currentPage));
 
 window.prevPage = prevPage;
 window.nextPage = nextPage;
 window.filterByCategory = filterByCategory;
+window.viewRecipe = viewRecipe;

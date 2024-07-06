@@ -37,6 +37,22 @@ header {
     text-decoration: none;
 }
 
+#edit-button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.0rem;
+    color: #6c757d;
+    padding: 0;
+    transition: color 0.3s ease;
+}
+
+#edit-button:hover {
+    color: #5a6268;
+    text-decoration: none;
+}
+
 .category {
     font-family: 'Merriweather', serif;
     font-weight: 300;
