@@ -1,11 +1,8 @@
-export async function createRecipe(recipe) {
+export async function createRecipe(formData) {
     try {
         const response = await fetch('/api/recipes', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(recipe)
+            body: formData
         });
 
         if (response.ok) {
