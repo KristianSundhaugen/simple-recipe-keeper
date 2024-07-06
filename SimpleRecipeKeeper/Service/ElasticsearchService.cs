@@ -94,11 +94,11 @@ public class ElasticsearchService : IElasticsearchService
     {
         var lastDocumentIdResponse = await _client.SearchAsync<Recipe>(s => s
         .Size(1)
-        .Sort(sort => sort.Descending("_id")) // Sort by descending ID to get the last document
+        .Sort(sort => sort.Descending("id")) // Sort by descending ID to get the last document
         .Source(source => source
             .Includes(i => i.Field(f => f.Id)) // Only include the ID field in the response
         )
-    );
+        );
 
         int newId;
         if (lastDocumentIdResponse.IsValid && lastDocumentIdResponse.Documents.Any())
