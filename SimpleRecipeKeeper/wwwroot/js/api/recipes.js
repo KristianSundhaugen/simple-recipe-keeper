@@ -19,6 +19,27 @@ export async function createRecipe(formData) {
     }
 }
 
+export async function updateRecipe(id, formData) {
+    try {
+        const response = await fetch(`/api/recipes/${id}`, {
+            method: 'PUT',
+            body: formData
+        });
+
+        if (response.ok) {
+            alert('Recipe updated successfully!');
+            return true;
+        } else {
+            alert('Failed to update recipe.');
+            return false;
+        }
+    } catch (error) {
+        console.error('Error updating recipe:', error);
+        alert('Failed to update recipe. Please try again later.');
+        return false;
+    }
+}
+
 export async function getAllRecipes(page = 1, pageSize = 10, foodCategory = null) {
     try {
         if(foodCategory != null){

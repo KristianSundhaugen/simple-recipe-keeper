@@ -5,10 +5,17 @@ namespace SimpleRecipeKeeper.Controllers
 {
     public class HomeController : Controller
     {
-        [HttpGet("/create-recipe")]
+        [HttpGet("/recipe-form")]
         public IActionResult CreateRecipeForm()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/html/forms/createRecipe.html");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/html/forms/recipe-form.html");
+            return PhysicalFile(path, "text/html");
+        }
+
+        [HttpGet("/recipe-form/{id}")]
+        public IActionResult UpdateRecipeForm()
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/html/forms/recipe-form.html");
             return PhysicalFile(path, "text/html");
         }
 

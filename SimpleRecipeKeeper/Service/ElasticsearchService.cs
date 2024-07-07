@@ -38,7 +38,7 @@ public class ElasticsearchService : IElasticsearchService
     }
 
 
-    public async Task<RecipeSearchResult> GetRecipesAsync(int page, int pageSize, string foodCategory = null)
+    public async Task<RecipeSearchResult> GetRecipesAsync(int page, int pageSize, string foodCategory = null, string orderBy = "id")
     {
         var from = (page - 1) * pageSize;
 
@@ -60,6 +60,9 @@ public class ElasticsearchService : IElasticsearchService
             .From(from)
             .Size(pageSize)
             .Query(query)
+            .Sort(sort => sort
+                .Field(f => f.Field(orderBy.ToLower()).Order(SortOrder.Ascending))
+            )
         );
 
         if (response.IsValid)
@@ -94,28 +97,25 @@ public class ElasticsearchService : IElasticsearchService
     {
         var lastDocumentIdResponse = await _client.SearchAsync<Recipe>(s => s
         .Size(1)
-        .Sort(sort => sort.Descending("id")) // Sort by descending ID to get the last document
+        .Sort(sort => sort.Descending("id"))
         .Source(source => source
-            .Includes(i => i.Field(f => f.Id)) // Only include the ID field in the response
+            .Includes(i => i.Field(f => f.Id))
         )
         );
 
         int newId;
         if (lastDocumentIdResponse.IsValid && lastDocumentIdResponse.Documents.Any())
         {
-            // Increment the last document ID to generate the new ID
             newId = lastDocumentIdResponse.Documents.First().Id + 1;
         }
         else
         {
-            // If there are no documents in the index, start with ID = 1
             newId = 1;
         }
 
-        // Set the new ID for the recipe
+        
         recipe.Id = newId;
 
-        // Index the recipe with the new ID
         var response = await _client.IndexDocumentAsync(recipe);
         if (response.IsValid)
         {
@@ -139,23 +139,13 @@ public class ElasticsearchService : IElasticsearchService
         var response = await _client.UpdateAsync<Recipe>(recipe.Id.ToString(), u => u.Doc(recipe).RetryOnConflict(3));
         if (response.IsValid)
         {
-            var updatedResponse = await _client.GetAsync<Recipe>(recipe.Id.ToString());
-            if (updatedResponse.IsValid)
-            {
-                return updatedResponse.Source;
-            }
-            else
-            {
-                throw new Exception($"Failed to retrieve updated recipe with ID: {recipe.Id}.");
-            }
+            return recipe;
         }
         else
         {
             throw new Exception($"Failed to update recipe with ID: {recipe.Id}.");
         }
     }
-
-
 
     public async Task IndexRecipeAsync(Recipe recipe)
     {

@@ -66,10 +66,17 @@ document.addEventListener('DOMContentLoaded', () => {
         editButton.addEventListener('click', () => {
             const recipeId = getRecipeId();
             if (recipeId) {
-                window.location.href = `/create-recipe/2`;
+                window.location.href = `/recipe-form/${recipeId}`;
             } else {
                 console.error('Recipe ID not found');
             }
         });
     }
+
+    function getRecipeId() {
+        const pathParts = window.location.pathname.split('/');
+        const id = pathParts[pathParts.length - 1];
+        return id ? id : null;
+    }
+
 });

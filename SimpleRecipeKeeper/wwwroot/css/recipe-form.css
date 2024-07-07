@@ -5,8 +5,9 @@ body {
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 75vh;
+    align-items: flex-start;  /* Change from center to flex-start to allow scrolling */
+    height: 100vh;  /* Make the body full height */
+    overflow-y: auto;  /* Enable vertical scrolling */
 }
 
 h1 {
@@ -99,6 +100,18 @@ input[type="submit"]:hover, button:hover {
 
 #ingredients h3 {
     margin-top: 0;
+}
+
+#existing-picture {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    max-height: 200px;
+    object-fit: cover;
 }
 
 @media (min-width: 600px) {

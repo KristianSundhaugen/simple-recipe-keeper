@@ -1,4 +1,4 @@
-import { createRecipe } from '../api/recipes.js';
+import { createRecipe, getRecipeById, updateRecipe } from '../api/recipes.js';
 
 let ingredientCount = 1;
 
@@ -18,24 +18,112 @@ function addIngredient() {
     document.getElementById('ingredients').appendChild(ingredientDiv);
 }
 
+function addExistingIngredient(index, ingredient = {}) {
+    const ingredientDiv = document.createElement('div');
+    ingredientDiv.classList.add('ingredient');
+    ingredientDiv.innerHTML = `
+        <label for="ingredientName${index}">Name:</label>
+        <input type="text" id="ingredientName${index}" name="ingredientName[]" value="${ingredient.name || ''}" required>
+        <label for="ingredientQuantity${index}">Quantity:</label>
+        <input type="number" step="any" id="ingredientQuantity${index}" name="ingredientQuantity[]" value="${ingredient.quantity || ''}" required>
+        <label for="ingredientPreparation${index}">Preparation:</label>
+        <input type="text" id="ingredientPreparation${index}" name="ingredientPreparation[]" value="${ingredient.preparation || ''}">
+        <button type="button" onclick="removeIngredient(this)" class="remove-btn"><i class="fas fa-trash"></i></button>
+    `;
+    document.getElementById('ingredients').appendChild(ingredientDiv);
+}
+
 function removeIngredient(button) {
     button.parentElement.remove();
 }
 
+function populateForm(recipe) {
+    document.getElementById('recipeId').value = recipe.id;
+    document.getElementById('title').value = recipe.title;
+    document.getElementById('preparationTimeInMinutes').value = recipe.preparationTimeInMinutes;
+    document.getElementById('cookTimeInMinutes').value = recipe.cookTimeInMinutes;
+    document.getElementById('totalTimeInMinutes').value = recipe.totalTimeInMinutes;
+    document.getElementById('instructions').value = recipe.instructions;
+
+    const existingPicture = document.getElementById('existing-picture');
+    existingPicture.src = recipe.pictureUrl;
+    existingPicture.style.display = 'block';
+
+    const ingredientsContainer = document.getElementById('ingredients');
+    ingredientsContainer.innerHTML = '';
+
+    recipe.ingredients.forEach((ingredient, index) => {
+        addExistingIngredient(index + 1, ingredient);
+    });
+}
+
+function getRecipeIdFromPath() {
+    const pathParts = window.location.pathname.split('/');
+    const pathPart = pathParts[pathParts.length - 1];
+    if(pathPart == "recipe-form"){
+        return null;
+    }
+    return pathPart;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const recipeId = getRecipeIdFromPath();
+
+    if (recipeId) {
+        try {
+            const recipe = await getRecipeById(recipeId);
+            populateForm(recipe);
+            document.getElementById('formTitle').textContent = 'Update Recipe';
+            document.getElementById('submitButton').value = 'Update Recipe';
+        } catch (error) {
+            console.error('Error fetching recipe:', error);
+            alert('Failed to load recipe for editing.');
+        }
+    }
+});
+
 document.getElementById('recipeForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    const recipeId = getRecipeIdFromPath();
     const formData = new FormData(document.getElementById('recipeForm'));
 
-    const success = await createRecipe(formData);
+    let success;
+    if (recipeId) {
+        success = await updateRecipe(recipeId, formData);
+    } else {
+        success = await createRecipe(formData);
+    }
 
     if (success) {
         document.getElementById('recipeForm').reset();
+        const recipePageUrl = `http://localhost:5288/recipe/${recipeId}`;
+        window.location.href = recipePageUrl;
+    } else {
+        alert('Failed to save recipe.');
     }
+
 });
 
 document.getElementById('back-button').addEventListener('click', () => {
     window.history.back();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const pictureInput = document.getElementById('picture');
+    const existingPicture = document.getElementById('existing-picture');
+
+    pictureInput.addEventListener('change', () => {
+        const file = pictureInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                existingPicture.src = e.target.result;
+                existingPicture.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 });
 
 window.addIngredient = addIngredient;
