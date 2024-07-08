@@ -5,12 +5,14 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Linq;
 
+
 [ApiController]
 [Route("api/recipes")]
 public class RecipeController : ControllerBase
 {
     private readonly ElasticsearchService _elasticsearchService;
     private readonly IWebHostEnvironment _hostingEnvironment;
+
 
     public RecipeController(ElasticsearchService elasticsearchService, IWebHostEnvironment hostingEnvironment)
     {
@@ -19,9 +21,9 @@ public class RecipeController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Recipe>>> GetRecipes(int page = 1, int pageSize = 10, string foodCategory = null)
+    public async Task<ActionResult<IEnumerable<Recipe>>> GetRecipes(int page = 1, int pageSize = 10, string foodCategory = null, string orderBy = "id")
     {
-        var recipes = await _elasticsearchService.GetRecipesAsync(page, pageSize, foodCategory);
+        var recipes = await _elasticsearchService.GetRecipesAsync(page, pageSize, foodCategory, orderBy);
         return Ok(recipes);
     }
 
@@ -71,6 +73,7 @@ public class RecipeController : ControllerBase
         var recipe = new Recipe
         {
             Title = model.Title,
+            FoodCategory = model.FoodCategory,
             PictureUrl = pictureUrl,
             PreparationTimeInMinutes = model.PreparationTimeInMinutes,
             CookTimeInMinutes = model.CookTimeInMinutes,
@@ -82,6 +85,7 @@ public class RecipeController : ControllerBase
         var createdRecipe = await _elasticsearchService.CreateRecipeAsync(recipe);
         return CreatedAtAction(nameof(GetRecipeById), new { id = createdRecipe.Id }, createdRecipe);
     }
+
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateRecipe(int id, [FromForm] RecipeUpdateModel model)
@@ -125,6 +129,13 @@ public class RecipeController : ControllerBase
                 Preparation = model.IngredientPreparation[i]
             });
         }
+
+        if (!Enum.IsDefined(typeof(FoodCategory), model.FoodCategory))
+        {
+            return BadRequest("Invalid Food Category.");
+        }
+
+        existingRecipe.FoodCategory = (FoodCategory)model.FoodCategory;
 
         existingRecipe.Title = model.Title;
         existingRecipe.PictureUrl = pictureUrl;
