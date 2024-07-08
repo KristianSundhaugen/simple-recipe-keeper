@@ -5,9 +5,9 @@ body {
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: flex-start;  /* Change from center to flex-start to allow scrolling */
-    height: 100vh;  /* Make the body full height */
-    overflow-y: auto;  /* Enable vertical scrolling */
+    align-items: flex-start; 
+    height: 100vh;
+    overflow-y: auto;
 }
 
 h1 {
@@ -112,6 +112,29 @@ input[type="submit"]:hover, button:hover {
     padding: 5px;
     max-height: 200px;
     object-fit: cover;
+}
+
+#foodCategory {
+    width: calc(100% - 20px);
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+    color: #495057;
+    font-size: 16px;
+}
+
+#foodCategory option {
+    background-color: #fff;
+    color: #495057;
+}
+
+#foodCategory:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 @media (min-width: 600px) {

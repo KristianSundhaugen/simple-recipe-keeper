@@ -1,6 +1,7 @@
 public class RecipeCreateModel
 {
     public string Title { get; set; }
+    public FoodCategory FoodCategory { get; set; }
     public IFormFile Picture { get; set; }
     public int? PreparationTimeInMinutes { get; set; }
     public int? CookTimeInMinutes { get; set; }

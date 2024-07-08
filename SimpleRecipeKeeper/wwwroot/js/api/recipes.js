@@ -6,15 +6,14 @@ export async function createRecipe(formData) {
         });
 
         if (response.ok) {
-            alert('Recipe created successfully!');
+            console.log('Recipe created successfully!');
             return true;
         } else {
-            alert('Failed to create recipe.');
+            console.log('Failed to create recipe.');
             return false;
         }
     } catch (error) {
         console.error('Error creating recipe:', error);
-        alert('Failed to create recipe. Please try again later.');
         return false;
     }
 }
@@ -27,15 +26,14 @@ export async function updateRecipe(id, formData) {
         });
 
         if (response.ok) {
-            alert('Recipe updated successfully!');
+            console.log('Recipe updated successfully!');
             return true;
         } else {
-            alert('Failed to update recipe.');
+            console.log('Failed to update recipe.');
             return false;
         }
     } catch (error) {
         console.error('Error updating recipe:', error);
-        alert('Failed to update recipe. Please try again later.');
         return false;
     }
 }

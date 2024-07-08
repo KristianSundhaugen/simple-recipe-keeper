@@ -1,4 +1,5 @@
 import { createRecipe, getRecipeById, updateRecipe } from '../api/recipes.js';
+import { FoodCategory } from '../enum/FoodCategory.js';
 
 let ingredientCount = 1;
 
@@ -45,6 +46,23 @@ function populateForm(recipe) {
     document.getElementById('totalTimeInMinutes').value = recipe.totalTimeInMinutes;
     document.getElementById('instructions').value = recipe.instructions;
 
+    const foodCategorySelect = document.getElementById('foodCategory');
+    foodCategorySelect.innerHTML = '';
+
+    Object.keys(FoodCategory).forEach(key => {
+        const option = document.createElement('option');
+        option.value = FoodCategory[key];
+        option.textContent = key;
+        foodCategorySelect.appendChild(option);
+    });
+
+    if (recipe.foodCategory !== undefined && recipe.foodCategory !== null) {
+        // foodCategorySelect.value = recipe.foodCategory.toString();
+        foodCategorySelect.value = 2;
+    } else {
+        foodCategorySelect.value = '';
+    }
+    
     const existingPicture = document.getElementById('existing-picture');
     existingPicture.src = recipe.pictureUrl;
     existingPicture.style.display = 'block';
@@ -69,6 +87,15 @@ function getRecipeIdFromPath() {
 document.addEventListener('DOMContentLoaded', async () => {
     const recipeId = getRecipeIdFromPath();
 
+    const foodCategoryDropdown = document.getElementById('foodCategory');
+
+    Object.keys(FoodCategory).forEach(key => {
+        const option = document.createElement('option');
+        option.value = FoodCategory[key];
+        option.textContent = key;
+        foodCategoryDropdown.appendChild(option);
+    });
+
     if (recipeId) {
         try {
             const recipe = await getRecipeById(recipeId);
@@ -91,18 +118,23 @@ document.getElementById('recipeForm').addEventListener('submit', async (e) => {
     let success;
     if (recipeId) {
         success = await updateRecipe(recipeId, formData);
+        if (success) {
+            document.getElementById('recipeForm').reset();
+            const recipePageUrl = `http://localhost:5288/recipe/${recipeId}`;
+            window.location.href = recipePageUrl;
+        } else {
+            alert('Failed to update recipe.');
+        }
     } else {
         success = await createRecipe(formData);
+        if (success) {
+            alert('New recipe created!');
+            document.getElementById('recipeForm').reset();
+            document.getElementById('existing-picture').reset();
+        } else {
+            alert('Failed to save recipe.');
+        }
     }
-
-    if (success) {
-        document.getElementById('recipeForm').reset();
-        const recipePageUrl = `http://localhost:5288/recipe/${recipeId}`;
-        window.location.href = recipePageUrl;
-    } else {
-        alert('Failed to save recipe.');
-    }
-
 });
 
 document.getElementById('back-button').addEventListener('click', () => {
