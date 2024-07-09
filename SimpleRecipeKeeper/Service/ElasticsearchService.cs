@@ -181,4 +181,37 @@ public class ElasticsearchService : IElasticsearchService
             throw new Exception("Failed to search recipes.");
         }
     }
+
+    public async Task<List<string>> GetAllIngredientsAsync()
+    {
+        var response = await _client.SearchAsync<Recipe>(s => s
+            .Size(0)
+            .Aggregations(a => a
+                .Nested("unique_ingredients", n => n
+                    .Path(p => p.Ingredients)
+                    .Aggregations(aa => aa
+                        .Terms("names", t => t
+                            .Field("ingredients.name")
+                            .Size(10000)
+                        )
+                    )
+                )
+            )
+        );
+
+        if (response.IsValid)
+        {
+            var ingredients = response.Aggregations.Nested("unique_ingredients")
+                .Terms("names").Buckets
+                .Select(b => b.Key)
+                .OrderBy(name => name)
+                .ToList();
+
+            return ingredients;
+        }
+        else
+        {
+            throw new Exception("Failed to retrieve ingredients.");
+        }
+    }
 }
