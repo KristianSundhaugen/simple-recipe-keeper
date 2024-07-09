@@ -1,101 +1,121 @@
 import { getAllRecipes } from '../api/recipes.js';
+import { applyFilters } from './filters.js';
+import { FoodCategory } from '../enum/FoodCategory.js';
+import { findCategoryItem, toggleCategorySelection, updateCategoryCheckbox } from '../utils/foodCategoryHelper.js';
+import config from '../../config.js';
 
 let currentPage = 1;
 const pageSize = 9;
 let recipes = [];
 let totalCount = 0;
+let currentFilters = null;
 
-async function loadRecipes(page = 1, foodCategory = null) {
+export async function loadRecipes(page = 1, filter = null) {
     try {
-        const result = await getAllRecipes(page, pageSize, foodCategory);
-        recipes = result.recipes;
-        const totalCount = result.totalCount;
+        const { fetchedRecipes, totalCount } = await fetchRecipes(page, filter);
 
-        const recipeList = document.getElementById('recipeList');
-        recipeList.innerHTML = '';
+        recipes = fetchedRecipes;
+        displayRecipes(recipes);
+        displayTotalCount(totalCount);
+        updatePaginationControls(filter);
 
-        const rows = Math.ceil(recipes.length / 3);
-        let htmlContent = '';
-
-        for (let i = 0; i < rows; i++) {
-            htmlContent += '<div class="row">';
-
-            for (let j = 0; j < 3; j++) {
-                const recipeIndex = i * 3 + j;
-                if (recipeIndex < recipes.length) {
-                    const recipe = recipes[recipeIndex];
-                    htmlContent += `
-                        <div class="col-4">
-                            <div class="recipe-item" onclick="viewRecipe(${recipe.id})">
-                                <img src="${recipe.pictureUrl || '/placeholder.jpg'}" alt="${recipe.title}" class="img-fluid">
-                                <h5>${recipe.title}</h5>
-                                <p><i class="fas fa-clock"></i> ${recipe.totalTimeInMinutes} mins</p>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-
-            htmlContent += '</div>';
-        }
-
-        recipeList.innerHTML = htmlContent;
-
-        const totalCountElement = document.getElementById('totalCount');
-        totalCountElement.innerText = `${totalCount} recipes found`;
-
-        updatePaginationControls();
     } catch (error) {
         console.error('Error loading recipes:', error);
     }
 }
 
+async function fetchRecipes(page, filter) {
+    const result = await getAllRecipes(page, pageSize, filter);
+    return {
+        fetchedRecipes: result.recipes,
+        totalCount: result.totalCount
+    };
+}
 
-function updatePaginationControls() {
-    const paginationControls = document.getElementById('paginationControls');
-    paginationControls.innerHTML = `
-        ${currentPage != 1 ? `<button onclick="prevPage()">Previous</button>` : ''}
-        <span>Page ${currentPage}</span>
-        ${recipes.length >= pageSize ? `<button onclick="nextPage()">Next</button>` : ''}
+function displayRecipes(recipes) {
+    const recipeList = document.getElementById('recipeList');
+    recipeList.innerHTML = '';
+
+    const rows = Math.ceil(recipes.length / 3);
+    let htmlContent = '';
+
+    for (let i = 0; i < rows; i++) {
+        htmlContent += '<div class="row">';
+
+        for (let j = 0; j < 3; j++) {
+            const recipeIndex = i * 3 + j;
+            if (recipeIndex < recipes.length) {
+                const recipe = recipes[recipeIndex];
+                htmlContent += renderRecipeCard(recipe);
+            }
+        }
+
+        htmlContent += '</div>';
+    }
+
+    recipeList.innerHTML = htmlContent;
+}
+
+function renderRecipeCard(recipe) {
+    return `
+        <div class="col-4">
+            <div class="recipe-item" onclick="viewRecipe(${recipe.id})">
+                <img src="${recipe.pictureUrl || '/placeholder.jpg'}" alt="${recipe.title}" class="img-fluid">
+                <h5>${recipe.title}</h5>
+                <p><i class="fas fa-clock"></i> ${recipe.totalTimeInMinutes} mins</p>
+            </div>
+        </div>
     `;
 }
 
-function prevPage() {
+function displayTotalCount(totalCount) {
+    const totalCountElement = document.getElementById('totalCount');
+    totalCountElement.innerText = `${totalCount} recipes found`;
+}
+
+export function resetPage() {
+    currentPage = 1;
+}
+
+function updatePaginationControls(filters) {
+    currentFilters = filters;
+    const paginationControls = document.getElementById('paginationControls');
+    const prevButton = currentPage > 1 ? `<button onclick="prevPage()">Previous</button>` : '';
+    const nextButton = recipes.length >= pageSize ? `<button onclick="nextPage()">Next</button>` : '';
+    paginationControls.innerHTML = `
+        ${prevButton}
+        <span>Page ${currentPage}</span>
+        ${nextButton}
+    `;
+}
+
+export function prevPage(filters = null) {
     if (currentPage > 1) {
         currentPage--;
-        loadRecipes(currentPage);
+        loadRecipes(currentPage, filters || currentFilters);
     }
 }
 
-function nextPage() {
+export function nextPage(filters = null) {
     currentPage++;
-    loadRecipes(currentPage);
+    loadRecipes(currentPage, filters || currentFilters);
 }
 
-function filterByCategory(category) {
-    const clickedItem = document.querySelector(`.category-item[data-category="${category}"]`);
+export function filterByCategory(category) {
+    const categoryItem = findCategoryItem(category);
 
-    if (!clickedItem) {
+    if (!categoryItem) {
         console.warn(`Category item for ${category} not found`);
         return;
     }
 
-    const isSelected = clickedItem.classList.contains('selected');
-    const categoryItems = document.querySelectorAll('.category-item');
-    categoryItems.forEach(item => {
-        item.classList.remove('selected');
-    });
-
-    if (isSelected) {
-        loadRecipes(currentPage);
-    } else {
-        clickedItem.classList.add('selected');
-        loadRecipes(currentPage, category);
-    }
+    toggleCategorySelection(categoryItem);
+    updateCategoryCheckbox(category, categoryItem);
+    applyFilters();
 }
 
-function viewRecipe(id) {
-    window.location.href = `http://localhost:5288/recipe/${id}`;
+export function viewRecipe(id) {
+    window.location.href = `${config.mainUrl}${config.recipePage}${id}`;
 }
 
 document.addEventListener('DOMContentLoaded', () => loadRecipes(currentPage));
@@ -104,3 +124,5 @@ window.prevPage = prevPage;
 window.nextPage = nextPage;
 window.filterByCategory = filterByCategory;
 window.viewRecipe = viewRecipe;
+window.loadRecipes = loadRecipes;
+window.resetPage = resetPage;

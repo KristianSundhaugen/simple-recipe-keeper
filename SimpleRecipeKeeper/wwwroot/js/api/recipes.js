@@ -38,10 +38,12 @@ export async function updateRecipe(id, formData) {
     }
 }
 
-export async function getAllRecipes(page = 1, pageSize = 10, foodCategory = null) {
+export async function getAllRecipes(page = 1, pageSize = 10, filter = null) {
+
     try {
-        if(foodCategory != null){
-            var query = `/api/recipes?page=${page}&pageSize=${pageSize}&foodCategory=${foodCategory}`;
+        if(filter != null){
+            const filterString = JSON.stringify(filter);
+            var query = `/api/recipes?page=${page}&pageSize=${pageSize}&filter=${encodeURIComponent(filterString)}`;
         } else {
             var query = `/api/recipes?page=${page}&pageSize=${pageSize}`;
         }

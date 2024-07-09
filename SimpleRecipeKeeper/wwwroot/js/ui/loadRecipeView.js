@@ -1,4 +1,5 @@
 import { FoodCategory } from '../enum/FoodCategory.js';
+import config from '../../config.js';
 
 async function fetchRecipeData(recipeId) {
     try {
@@ -57,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const backButton = document.getElementById('back-button');
     if (backButton) {
         backButton.addEventListener('click', () => {
-            window.location.href = '/home';
+            window.location.href = `${config.mainUrl}${config.homePage}`;
         });
     }
 
@@ -66,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         editButton.addEventListener('click', () => {
             const recipeId = getRecipeId();
             if (recipeId) {
-                window.location.href = `/recipe-form/${recipeId}`;
+                window.location.href = `${config.mainUrl}${config.recipeFormPage}${recipeId}`;
             } else {
                 console.error('Recipe ID not found');
             }

@@ -1,5 +1,6 @@
 import { createRecipe, getRecipeById, updateRecipe } from '../api/recipes.js';
 import { FoodCategory } from '../enum/FoodCategory.js';
+import config from '../../config.js';
 
 let ingredientCount = 1;
 
@@ -120,7 +121,7 @@ document.getElementById('recipeForm').addEventListener('submit', async (e) => {
         success = await updateRecipe(recipeId, formData);
         if (success) {
             document.getElementById('recipeForm').reset();
-            const recipePageUrl = `http://localhost:5288/recipe/${recipeId}`;
+            const recipePageUrl = `${config.mainUrl}${config.recipePage}${recipeId}`;
             window.location.href = recipePageUrl;
         } else {
             alert('Failed to update recipe.');

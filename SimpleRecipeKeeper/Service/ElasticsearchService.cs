@@ -1,5 +1,7 @@
 using Elasticsearch.Net;
 using Nest;
+using Newtonsoft.Json;
+using SimpleRecipeKeeper.Models;
 
 public class ElasticsearchService : IElasticsearchService
 {
@@ -38,32 +40,50 @@ public class ElasticsearchService : IElasticsearchService
     }
 
 
-    public async Task<RecipeSearchResult> GetRecipesAsync(int page, int pageSize, string foodCategory = null, string orderBy = "id")
+    public async Task<RecipeSearchResult> GetRecipesAsync(int page, int pageSize, string filter, string orderBy)
     {
-        var from = (page - 1) * pageSize;
-
-        Func<QueryContainerDescriptor<Recipe>, QueryContainer> query;
-        if (!string.IsNullOrEmpty(foodCategory))
-        {
-            query = q => q
-                .Match(m => m
-                    .Field(f => f.FoodCategory)
-                    .Query(foodCategory)
-                );
-        }
-        else
-        {
-            query = q => q.MatchAll();
-        }
-
-        var response = await _client.SearchAsync<Recipe>(s => s
-            .From(from)
+        // Initialize the query
+        var query = new SearchDescriptor<Recipe>()
+            .From((page - 1) * pageSize)
             .Size(pageSize)
-            .Query(query)
-            .Sort(sort => sort
-                .Field(f => f.Field(orderBy.ToLower()).Order(SortOrder.Ascending))
-            )
-        );
+            .Sort(s => s.Ascending(orderBy));
+
+        // Apply the filter if provided
+        if (!string.IsNullOrEmpty(filter))
+        {
+            var filterObj = JsonConvert.DeserializeObject<RecipeFilter>(filter);
+
+            query = query.Query(q => q.Bool(b => 
+            {
+                var mustQueries = new List<Func<QueryContainerDescriptor<Recipe>, QueryContainer>>();
+
+                if (filterObj.FoodCategories != null && filterObj.FoodCategories.Any())
+                {
+                    mustQueries.Add(m => m.Terms(t => t.Field(f => f.FoodCategory).Terms(filterObj.FoodCategories)));
+                }
+
+                if (filterObj.Ingredients != null && filterObj.Ingredients.Any())
+                {
+                    mustQueries.Add(m => m.Nested(n => n
+                        .Path(p => p.Ingredients)
+                        .Query(nq => nq.Bool(nb => nb
+                            .Must(mq => mq.Term(t => t.Field(f => f.Ingredients.First().Name).Value(filterObj.Ingredients.First())))))));
+                }
+
+                if (filterObj.MaxTime != null && filterObj.MaxTime.HasValue)
+                {
+                    mustQueries.Add(m => m.Range(r => r.Field(f => f.TotalTimeInMinutes).LessThanOrEquals(filterObj.MaxTime)));
+                }
+
+                return b.Must(mustQueries.ToArray());
+            }));
+        }
+
+        // Serialize query to JSON for debugging
+        var requestJson = _client.RequestResponseSerializer.SerializeToString(query);
+        System.Console.WriteLine(requestJson);
+
+        var response = await _client.SearchAsync<Recipe>(query);
 
         if (response.IsValid)
         {
@@ -78,6 +98,9 @@ public class ElasticsearchService : IElasticsearchService
             throw new Exception("Failed to retrieve recipes.");
         }
     }
+
+
+
 
 
     public async Task<Recipe> GetRecipeByIdAsync(string id)
