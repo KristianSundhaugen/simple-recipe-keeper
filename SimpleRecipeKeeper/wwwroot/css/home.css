@@ -1,9 +1,14 @@
 /* home.css */
+html {
+    overflow-y: scroll;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f2e8cf;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
 
 .container {
@@ -17,8 +22,9 @@ body {
 
 /* lagt til for å gjøre main content større */
 .main-content {
-    width: 90%;
-  }
+    width: 100%;
+    overflow: hidden;
+}
 
 h1,
 h2,
@@ -165,8 +171,9 @@ a button:hover {
 
 .categories-section {
     position: relative;
-    width: 85%;
-  }
+    width: 100%;
+    overflow: hidden;
+}
 
 .carousel-control-prev,
 .carousel-control-next {
@@ -200,7 +207,8 @@ a button:hover {
     display: flex;
     flex-wrap: nowrap;
     scroll-snap-type: x mandatory;
-    overflow-y: hidden;
+    overflow: hidden; /* Prevent horizontal scrolling */
+
 }
 
 .category-item {
@@ -262,6 +270,7 @@ a button:hover {
 .recipe-section {
     position: relative;
     width: 120%;
+    overflow: hidden;
   }
 
 .recipe-item {
