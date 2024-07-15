@@ -9,5 +9,8 @@ public enum FoodCategory
     Asian,
     Mexican,
     Burger,
-    Italian
+    Italian,
+    Seafood,
+    Soup,
+    Dessert
 }
