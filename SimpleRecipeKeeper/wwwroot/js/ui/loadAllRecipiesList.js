@@ -5,7 +5,7 @@ import { findCategoryItem, toggleCategorySelection, updateCategoryCheckbox } fro
 import config from '../../config.js';
 
 let currentPage = 1;
-const pageSize = 9;
+const pageSize = 12;
 let recipes = [];
 let totalCount = 0;
 let currentFilters = null;
@@ -36,14 +36,14 @@ function displayRecipes(recipes) {
     const recipeList = document.getElementById('recipeList');
     recipeList.innerHTML = '';
 
-    const rows = Math.ceil(recipes.length / 3);
+    const rows = Math.ceil(recipes.length / 4);
     let htmlContent = '';
 
     for (let i = 0; i < rows; i++) {
         htmlContent += '<div class="row">';
 
-        for (let j = 0; j < 3; j++) {
-            const recipeIndex = i * 3 + j;
+        for (let j = 0; j < 4; j++) {
+            const recipeIndex = i * 4 + j;
             if (recipeIndex < recipes.length) {
                 const recipe = recipes[recipeIndex];
                 htmlContent += renderRecipeCard(recipe);
@@ -58,7 +58,7 @@ function displayRecipes(recipes) {
 
 function renderRecipeCard(recipe) {
     return `
-        <div class="col-4">
+        <div class="col-md-3">
             <div class="recipe-item" onclick="viewRecipe(${recipe.id})">
                 <img src="${recipe.pictureUrl || '/placeholder.jpg'}" alt="${recipe.title}" class="img-fluid">
                 <h5>${recipe.title}</h5>
