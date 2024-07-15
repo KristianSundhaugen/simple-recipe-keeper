@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Keeper</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/home.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="../js/ui/loadAllRecipiesList.js" type="module" defer></script>
-    <script src="../js/ui/searchRecipes.js" type="module"></script>
-    <script src="../js/ui/filters.js" type="module" defer></script>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Recipe Keeper</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/home.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <script src="../js/ui/loadAllRecipiesList.js" type="module" defer></script>
+        <script src="../js/ui/searchRecipes.js" type="module" defer></script>
+        <script src="../js/ui/filters.js" type="module" defer></script>
+    </head>
 <body>
     <div class="header">
-        <div class="search-section">
-            <input type="text" id="searchField" placeholder="Search...">
-            <i class="fas fa-search" id="searchIcon"></i>
-            <div id="searchDropdown" class="dropdown-menu" style="display: none;"></div>
-        </div>
-
-        <div class="add-recipe-section">
-            <a href="/recipe-form">
-                <button>New Recipe</button>
-            </a>
+        <div class="search-and-add-container">
+            <div class="search-section">
+                <input type="text" id="searchField" placeholder="Search...">
+                <i class="fas fa-search" id="searchIcon"></i>
+                <div id="searchDropdown" class="dropdown-menu" style="display: none;"></div>
+            </div>
+            <div class="add-recipe-section">
+                <a href="/recipe-form">
+                    <button>
+                        <i class="fas fa-plus-circle"></i> New Recipe
+                    </button>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -35,16 +38,15 @@
                     <div id="foodCategoryFilter" class="filterItem"></div>  <!-- lagt inn class her -->
                 </div>
                  <div id="timeContainer" class="form-group">
-                     <label>Time frame:</label>
-                        <input type="range" id="timeSlider" min="0" max="180" step="10">
-                        <span id="timeSliderValue">0 min</span>
+                    <label>Time frame:</label>
+                    <input type="range" id="timeSlider" min="0" max="180" step="10" value="0">
+                    <span id="timeSliderValue">0 min</span>
                 </div>
                 <div class="form-group"> 
                     <label>Ingredients:</label>
                     <div id="ingredientsFilter" class="filterItem"> <!-- endret class fra "ingredient-scroll"-->
                     </div>
                 </div>
-                <button id="applyFiltersButton">Apply Filters</button>
             </div>
         </div>
 
@@ -66,6 +68,10 @@
                                 <img src="../img/asian.jpg" class="d-block w-100" alt="Asian Cuisine">
                                 <p>Asian</p>
                             </div>
+                            <div class="category-item" onclick="filterByCategory('Pasta')" data-category="Pasta">
+                                    <img src="../img/pasta.jpg" class="d-block w-100" alt="Pasta">
+                                    <p>Pasta</p>
+                            </div>
                         </div>
                     </div>
                     <div class="carousel-item">
@@ -82,33 +88,41 @@
                                 <img src="../img/mediterranean.jpg" class="d-block w-100" alt="Mediterranean Cuisine">
                                 <p>Mediterranean</p>
                             </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="d-flex">
-                            <div class="category-item" onclick="filterByCategory('Pasta')" data-category="Pasta">
-                                <img src="../img/pasta.jpg" class="d-block w-100" alt="Pasta">
-                                <p>Pasta</p>
-                            </div>
                             <div class="category-item" onclick="filterByCategory('Pizza')" data-category="Pizza">
                                 <img src="../img/pizza.jpg" class="d-block w-100" alt="Pizza">
                                 <p>Pizza</p>
                             </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="d-flex">
                             <div class="category-item" onclick="filterByCategory('Salad')" data-category="Salad">
                                 <img src="../img/salad.jpg" class="d-block w-100" alt="Salad">
                                 <p>Salad</p>
                             </div>
+                            <div class="category-item" onclick="filterByCategory('Soup')" data-category="Soup">
+                                <img src="../img/soup.jpg" class="d-block w-100" alt="Soup">
+                                <p>Soup</p>
+                            </div>
+                            <div class="category-item" onclick="filterByCategory('Dessert')" data-category="Dessert">
+                                <img src="../img/dessert.jpg" class="d-block w-100" alt="Dessert">
+                                <p>Dessert</p>
+                            </div>
+                            <div class="category-item" onclick="filterByCategory('Seafood')" data-category="Seafood">
+                                <img src="../img/seafood.jpg" class="d-block w-100" alt="Seafood">
+                                <p>Seafood</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <a class="carousel-control-prev" href="#categoriesCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <button id="prevButton" class="carousel-control-custom-prev" onclick="prevCategory()">
+                    <i class="fas fa-arrow-left"></i>
                     <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#categoriesCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+                <button id="nextButton" class="carousel-control-custom-next" onclick="nextCategory()">
+                    <i class="fas fa-arrow-right"></i>
                     <span class="sr-only">Next</span>
-                </a>
+                </button>
             </div>
 
             <div class="recipes-section">

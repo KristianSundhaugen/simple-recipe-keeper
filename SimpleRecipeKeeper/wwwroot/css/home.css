@@ -1,6 +1,7 @@
 /* home.css */
+
 html {
-    overflow-y: scroll;
+    overflow: scroll;
 }
 
 body {
@@ -8,7 +9,6 @@ body {
     background-color: #f2e8cf;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
 }
 
 .container {
@@ -17,20 +17,28 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: row;
-    gap: 4rem;
+    gap: 6rem;
+    justify-content: center;
 }
 
-/* lagt til for å gjøre main content større */
+.container > *:first-child {
+    margin-left: -5rem;
+    margin-top: 3rem;
+}
+
+.container > *:last-child {
+    margin-right: 9rem;
+}
+
 .main-content {
-    width: 100%;
-    overflow: hidden;
+    width: 90%;
 }
 
 h1,
 h2,
 h4 {
-color: #343a40;
-margin-bottom: 15px;
+    color: #343a40;
+    margin-bottom: 15px;
 }
 
 .header {
@@ -45,17 +53,31 @@ margin-bottom: 15px;
     border-bottom: 1px solid #ccc;
 }
 
+.search-and-add-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+}
+
 .search-section {
     display: flex;
     align-items: center;
-    width: 33.33%; /* 1/3 of the header width */
-    max-width: 400px; /* Adjust this value as needed */
-    margin-right: 20px; /* Space between search field and button */
+    width: 70%;
+    max-width: 25rem;
+    margin-right: 20px; 
+    margin-left: 35rem;
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
 }
 
 .add-recipe-section {
-    width: 15%;
-    max-width: 15%; /* Adjust as needed */
+    width: auto;
+    margin: 0;
 }
 
 .add-recipe-section button {
@@ -68,6 +90,11 @@ margin-bottom: 15px;
     padding: 10px 20px;
     border-radius: 4px;
     white-space: nowrap;
+    margin-right: 35rem;
+}
+
+.add-recipe-section button i {
+    margin-right: 2px;
 }
 
 .add-recipe-section button:hover {
@@ -94,8 +121,8 @@ margin-bottom: 15px;
 }
 
 #searchField {
-    width: 100%;
-    padding: 10px 40px 10px 10px;
+    width: 25rem;
+    padding: 10px 10px 10px 40px;
     border: 1px solid #ced4da;
     border-radius: 4px;
     box-sizing: border-box;
@@ -103,10 +130,15 @@ margin-bottom: 15px;
 
 #searchIcon {
     position: absolute;
-    right: 10px;
-    top: 50%;
+    left: 42.5rem;
+    top: 43%;
     transform: translateY(-50%);
-    color: #ccc;
+    color: #959595;
+    pointer-events: none;
+}
+
+#searchField:focus::placeholder {
+    color: transparent;
 }
 
 #searchButton:hover {
@@ -115,9 +147,9 @@ margin-bottom: 15px;
 
 #searchDropdown {
     position: absolute;
-    top: calc(100% - 13px);
+    top: calc(100% + 5px);
     left: 0;
-    width: 100%;
+    width: calc(100% - 20px); /* Adjust width to match search field minus padding */
     background-color: #fff;
     border: 1px solid #ced4da;
     border-radius: 4px;
@@ -125,7 +157,6 @@ margin-bottom: 15px;
     z-index: 1000;
     max-height: 200px;
     overflow-y: auto;
-    width: calc(100% - 2px);
 }
 
 .dropdown-item {
@@ -146,7 +177,6 @@ margin-bottom: 15px;
 input[type="text"],
 button,
 a button {
-    width: calc(100% - 20px);
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ced4da;
@@ -171,51 +201,66 @@ a button:hover {
 
 .categories-section {
     position: relative;
-    width: 100%;
-    overflow: hidden;
+    width: 85%;
 }
 
-.carousel-control-prev,
-.carousel-control-next {
+.carousel-control-custom-prev,
+.carousel-control-custom-next {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
-    background-color: transparent;
-    padding: 10px;
-    border-radius: 50%;
-    color: #000000;
-    z-index: 1000;
+    background-color: #40513B;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 1.5rem;
+    /* text-align: center; */
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    white-space: nowrap;
+    width: auto;
+    height: 2rem;
 }
 
-.carousel-control-prev {
-    left: -90px;
+
+.carousel-control-custom-prev:hover,
+.carousel-control-custom-next:hover {
+    background-color: #609966;
 }
 
-.carousel-control-next {
-    right: -60px;
+
+.carousel-control-custom-prev {
+    left: -50px; /* Adjust this value to move the button further left */
+}
+
+.carousel-control-custom-next {
+    right: -50px; /* Adjust this value to move the button further right */
+}
+
+.fa-arrow-left,
+.fa-arrow-right {
+    font-size: 20px;
+    vertical-align: middle;
+    margin-top: -1.5rem;
 }
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
     width: 20px;
     height: 20px;
-    background-color: #000000;
+    background-color: transparent;
     background-size: cover;
 }
 
 .carousel-inner {
+    position: relative;
     display: flex;
     flex-wrap: nowrap;
     scroll-snap-type: x mandatory;
-    overflow: hidden; /* Prevent horizontal scrolling */
-
+    overflow-y: hidden;
 }
 
 .category-item {
-    /* width: 190px;
-    height: 135px; */
-    /* lagt til */
-    width: auto; /* lagt til */
+    width: auto;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -227,7 +272,7 @@ a button:hover {
     margin-bottom: 20px;
     position: relative;
     cursor: pointer;
-  }
+}
 
 .category-item.selected {
     border-color: #609966;
@@ -262,29 +307,28 @@ a button:hover {
 .row {
     display: flex;
     flex-wrap: wrap;
-    /* margin-left: -15px;
-    margin-right: -15px; */
 }
 
-/* lagt til */
 .recipe-section {
     position: relative;
     width: 120%;
-    overflow: hidden;
-  }
+}
+
+#totalCount {
+    margin-bottom: 20px;
+}
 
 .recipe-item {
     height: 90%;
-    width: auto;
+    width: 100%;
     border: 1px solid #babd8d;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 15px;
     margin-bottom: 20px;
-    margin: #babd8d;
     background-color: #fff;
     transition: transform 0.2s, box-shadow 0.2s;
-  }
+}
 
 .recipe-item:hover {
     transform: translateY(-5px);
@@ -292,25 +336,30 @@ a button:hover {
 }
 
 .recipe-item img {
-    width: 130px;
-    height: 122px;
+    width: 100%;
+    height: auto;
     border-radius: 5px;
     object-fit: cover;
     object-position: center;
 }
 
-/* dobbeltsjekk h type/størrelse her at den stemmer med html */
 .recipe-item h5 {
     margin-top: 10px;
     font-size: 1.25em;
     font-weight: bold;
     color: #333;
-  }
+}
 
 .recipe-item p {
     margin-top: 5px;
     color: #666;
     font-size: 0.9em;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -15px;
 }
 
 .pagination {
@@ -321,7 +370,7 @@ a button:hover {
 #ingredientsFilter {
     scrollbar-width: thin;
     scrollbar-color: #888 #f1f1f1;
-  }
+}
 
 #ingredientsFilter label {
     margin-bottom: 5px;
@@ -347,30 +396,65 @@ a button:hover {
 .filter-section {
     max-height: 50rem; /* Adjust this value to show approximately 20 ingredients */
     overflow-y: auto;
-    width: 15rem;
+    width: 20rem;
     border: 1px solid #ced4da;
     border-radius: 1rem;
     padding: 1rem;
     background-color: #fff;
-    /* margin-left: 0.5rem; */
-  }
-  
-  #filterContainer {
-  }
-  
-  .form-group {
+}
+
+.form-group {
     margin-top: 1rem;
-    /* width: 100%; */
-    /* border: 0.1rem solid #ced4da; */
-  }
-  
-  #timeContainer {
+}
+
+#timeContainer {
     width: 80%;
     display: flex;
     flex-direction: column;
-  }
-  
-  input[type="checkbox"] {
+}
+
+#timeSlider {
+    width: 100%;
+    margin-top: 5px;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background-color: #609966;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity 0.15s ease-in-out;
+    border-radius: 5px;
+}
+
+#timeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.8);
+}
+
+#timeSlider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.8);
+}
+
+#timeSliderValue {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 1rem;
+    color: #555;
+}
+
+input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
     display: inline-flex;
@@ -385,9 +469,9 @@ a button:hover {
     width: 1.25rem;
     height: 1.25rem;
     background-color: #fff;
-  }
-  
-  input[type="checkbox"]::before {
+}
+
+input[type="checkbox"]::before {
     content: "";
     width: 0.4rem;
     height: 0.7rem;
@@ -396,17 +480,17 @@ a button:hover {
     transform: scale(0) rotate(45deg);
     transform-origin: bottom right;
     transition: transform 0.2s ease-in-out;
-  }
-  
-  input[type="checkbox"]:checked {
+}
+
+input[type="checkbox"]:checked {
     background-color: #40513B;
     border-color: #40513B;
-  }
-  
-  input[type="checkbox"]:checked::before {
+}
+
+input[type="checkbox"]:checked::before {
     border-color: #fff;
     transform: scale(1) rotate(45deg);
-  }
+}
 
 @media (min-width: 600px) {
     .search-section,
@@ -416,8 +500,9 @@ a button:hover {
         width: 80%;
     }
     #searchDropdown {
-        width: calc(100% - 20px);
-        left: 10px;
+        width: calc(22% - 20px);
+        top: calc(70% + 3px);;
+        left: auto;
     }
 }
 
@@ -426,6 +511,6 @@ a button:hover {
     .add-recipe-section,
     .categories-section,
     .recipes-section {
-        width: 60%;
+        width: 130%;
     }
 }
