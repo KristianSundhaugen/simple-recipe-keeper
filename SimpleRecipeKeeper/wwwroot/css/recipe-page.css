@@ -3,7 +3,7 @@ body {
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    background-color: #EDF1D6;
+    background-color: #f2e8cf;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -27,7 +27,7 @@ header {
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     color: #6c757d;
     padding: 0;
     transition: color 0.3s ease;
@@ -89,6 +89,10 @@ main {
     padding-left: 20px;
 }
 
+.list-group-item {
+    background-color: #f2e8cf;
+}
+
 .notes {
     margin-top: 20px;
     font-style: italic;
@@ -111,10 +115,15 @@ main {
     text-align: center;
 }
 
+.time-info p {
+    font-size: 1.1rem;
+}
+
 .recipe-image {
-    max-width: 100%;
+    max-width: 50%;
     height: auto;
     margin: 20px 0;
+    border: 1px solid;
 }
 
 .directions-list {
@@ -131,12 +140,15 @@ main {
 .ingredients-title, .directions-title {
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    color: #2c3e50;
+    color: #000;
     text-transform: uppercase;
     letter-spacing: 1px;
+    border-bottom: 1px solid black;
+    margin-bottom: 1.5rem;
 }
 
 .card {
     border: none;
     box-shadow: none;
+    background-color: #f2e8cf;
 }
