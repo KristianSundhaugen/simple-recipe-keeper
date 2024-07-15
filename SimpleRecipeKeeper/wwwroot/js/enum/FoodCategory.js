@@ -8,5 +8,8 @@ export const FoodCategory = {
     Asian: 6,
     Mexican: 7,
     Burger: 8,
-    Italian: 9
+    Italian: 9,
+    Seafood: 10,
+    Soup: 11,
+    Dessert: 12
 };
