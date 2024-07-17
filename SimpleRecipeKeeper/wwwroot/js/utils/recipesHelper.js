@@ -12,7 +12,7 @@ function addIngredient() {
         <label for="ingredientName${ingredientCount}">Name:</label>
         <input type="text" id="ingredientName${ingredientCount}" name="ingredientName[]" required>
         <label for="ingredientQuantity${ingredientCount}">Quantity:</label>
-        <input type="number" step="any" id="ingredientQuantity${ingredientCount}" name="ingredientQuantity[]" required>
+        <input type="text" step="any" id="ingredientQuantity${ingredientCount}" name="ingredientQuantity[]" required>
         <label for="ingredientPreparation${ingredientCount}">Preparation:</label>
         <input type="text" id="ingredientPreparation${ingredientCount}" name="ingredientPreparation[]">
         <button type="button" onclick="removeIngredient(this)" class="remove-btn"><i class="fas fa-trash"></i></button>
@@ -27,7 +27,7 @@ function addExistingIngredient(index, ingredient = {}) {
         <label for="ingredientName${index}">Name:</label>
         <input type="text" id="ingredientName${index}" name="ingredientName[]" value="${ingredient.name || ''}" required>
         <label for="ingredientQuantity${index}">Quantity:</label>
-        <input type="number" step="any" id="ingredientQuantity${index}" name="ingredientQuantity[]" value="${ingredient.quantity || ''}" required>
+        <input type="text" step="any" id="ingredientQuantity${index}" name="ingredientQuantity[]" value="${ingredient.quantity || ''}" required>
         <label for="ingredientPreparation${index}">Preparation:</label>
         <input type="text" id="ingredientPreparation${index}" name="ingredientPreparation[]" value="${ingredient.preparation || ''}">
         <button type="button" onclick="removeIngredient(this)" class="remove-btn"><i class="fas fa-trash"></i></button>
@@ -65,8 +65,10 @@ function populateForm(recipe) {
     }
     
     const existingPicture = document.getElementById('existing-picture');
+    const fileInputContent = document.querySelector('.file-input-content');
     existingPicture.src = recipe.pictureUrl;
     existingPicture.style.display = 'block';
+    fileInputContent.style.display = 'none';
 
     const ingredientsContainer = document.getElementById('ingredients');
     ingredientsContainer.innerHTML = '';
@@ -145,6 +147,7 @@ document.getElementById('back-button').addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const pictureInput = document.getElementById('picture');
     const existingPicture = document.getElementById('existing-picture');
+    const fileInputContent = document.querySelector('.file-input-content');
 
     pictureInput.addEventListener('change', () => {
         const file = pictureInput.files[0];
@@ -153,10 +156,61 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = (e) => {
                 existingPicture.src = e.target.result;
                 existingPicture.style.display = 'block';
+                fileInputContent.style.display = 'none';
             };
             reader.readAsDataURL(file);
         }
     });
+
+    // Function to handle drag and drop
+    const fileInputWrapper = document.querySelector('.file-input-wrapper');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        fileInputWrapper.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        fileInputWrapper.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        fileInputWrapper.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight() {
+        fileInputWrapper.classList.add('highlight');
+    }
+
+    function unhighlight() {
+        fileInputWrapper.classList.remove('highlight');
+    }
+
+    fileInputWrapper.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const file = dt.files[0];
+
+        pictureInput.files = dt.files;
+        handleFiles(file);
+    }
+
+    function handleFiles(file) {
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                existingPicture.src = e.target.result;
+                existingPicture.style.display = 'block';
+                fileInputContent.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 });
 
 window.addIngredient = addIngredient;

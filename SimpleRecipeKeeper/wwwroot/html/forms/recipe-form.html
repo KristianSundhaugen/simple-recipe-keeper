@@ -24,9 +24,18 @@
         <label for="foodCategory">Food Category:</label>
         <select id="foodCategory" name="foodCategory"></select>
 
-        <label for="picture">Picture:</label>
-        <input type="file" id="picture" name="picture" accept="image/*">
-        <img id="existing-picture" src="" alt="Recipe Image" style="max-width: 100%; height: auto; display: none;">
+        <label for="picture">Picture upload: </label>
+        <div class="file-input-wrapper">
+            <input type="file" id="picture" name="picture" accept="image/*">
+            <div class="file-input-content">
+                <div class="file-input-icon">
+                    <i class="fas fa-upload"></i>
+                </div>
+                <div class="file-input-text">Choose an image to upload</div>
+            </div>
+            <img id="existing-picture" src="" alt="Recipe Image" style="display: none;">
+        </div>
+
 
         <label for="preparationTimeInMinutes">Preparation Time (minutes):</label>
         <input type="number" id="preparationTimeInMinutes" name="preparationTimeInMinutes">
@@ -43,7 +52,7 @@
                 <label for="ingredientName1">Name:</label>
                 <input type="text" id="ingredientName1" name="ingredientName[]" required>
                 <label for="ingredientQuantity1">Quantity:</label>
-                <input type="number" step="any" id="ingredientQuantity1" name="ingredientQuantity[]" required>
+                <input type="text" step="any" id="ingredientQuantity1" name="ingredientQuantity[]" required>
                 <label for="ingredientPreparation1">Preparation:</label>
                 <input type="text" id="ingredientPreparation1" name="ingredientPreparation[]">
                 <button type="button" onclick="removeIngredient(this)" class="remove-btn"><i class="fas fa-trash"></i></button>
