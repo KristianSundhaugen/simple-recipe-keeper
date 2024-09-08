@@ -1,4 +1,31 @@
-* Be able to get all documents from elastic
-* Be able to create a new document
-* Create frontend I can use to search
-* Create frontend I can use to create new recipes
+Tomorrow:
+[v] Fix pagenation home screen
+* Add posibility to upload pictures in create new recipe
+    * Add fallback to placeholder
+    * Fix adding more ingredients
+[v] Create page to view recipe
+[v] Fix errors in console
+
+
+
+Backlog:
+[V] Create home screen
+    * Add search functionality to search for titles
+    * Add paginated list of all recipies
+        * Make it som that I can filter based on: 
+            * time
+            * Meal type
+            * Ingredients
+[V] Create frontend I can use to create new recipes
+    * Make sure funtionality is as wanted 
+* Create frontend that shows off a recipe
+* Create frontend I can use to update a recipe
+* Add filter menu on left side of screen on home page
+
+
+DONE:
+Make it som that I can filter based on: 
+    * category
+Make a "Get all recipes
+Add count to amount of recipes
+Make carousel for category of recipe
