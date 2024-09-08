@@ -397,7 +397,11 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+#appsettings
+SimpleRecipeKeeper/appsettings.json
+SimpleRecipeKeeper/appsettings.Development.json
+
 # HTTP_ca.crt
 http_ca.crt
 
-todo.txt
+
